@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% block title %}
+    Iniciar sesión
+{% endblock %}
+
+{% block main %}
+
+    <script>
+        window.location.replace("/accounts/login/");
+    </script>
+
+{% endblock %}

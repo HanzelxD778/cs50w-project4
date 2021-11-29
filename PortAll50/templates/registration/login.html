@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block head_css %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+
+{% block title %}
+    Iniciar sesión
+{% endblock %}
+
+{% block main %}
+    <!--
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        Your username and password didn't match. Please try again.
+    </div>
+    {% endif %}
+    -->
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+    {% else %}
+        <p>Please login to see this page.</p>
+    {% endif %}
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 class="text-center">Log in</h1>
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <table>
+                        {% bootstrap_form form %}
+                    </table>
+                    <input type="submit" value="Log in" class="btn btn-primary" />
+                    <a role="button" class="btn btn-success" href="{% url 'register' %}">Create an account</a>
+                    <small class="form-text text-muted">Log in or create an account if you don't have one yet</small>
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </form>
+            </div>
+            <div class="col-lg-2">
+                
+            </div>
+            <div class="col-lg-4">
+                <img src="https://www.harvardsquare.com/wp-content/uploads/2019/07/PINOCCHIO-logo.jpg" alt="">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
