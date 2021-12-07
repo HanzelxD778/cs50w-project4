@@ -15,47 +15,20 @@
 
 {% block main %}
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <h2>Agregar un curso</h2>
-                <div class="card">
+        <div class="row row-cols-1 row-cols-md-3">
+            {% for curso in cursos %}
+                <div class="col mb-4">
+                    <div class="card h-100">
+                    <img src="{{curso.imagen.url}}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <form method="POST" action="{% url 'registrarCurso' %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <input type="text" name="nombre_curso" class="form-control" placeholder="Nombre del nuevo curso">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Estudiantes de este curso</label>
-                                <select class="form-control" id="exampleFormControlSelect1" name="estudiantes_curso">
-                                    {% for usuario in usuarios %}
-                                        <option value="{{usuario.pk}}">{{usuario.username}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <input name='propietario_curso' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                            value="{{propietario}}" readonly placeholder="Default input">
-                            <div class="form-group">
-                                <input type="submit" class="btn btn-success" value="Guardar">
-                            </div>
-                        </form>
+                        <a style="color: black;" href="{% url 'curso' curso.id %}"><h5 class="card-title" style="color: black;">{{curso.nombre_curso}}</5></a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Docente: {{curso.propietario}}</small>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-2">
-                
-            </div>
-            <div class="col-lg-4">
-                <h2>Cursos creados</h2>
-                {% for curso in cursos %}
-                    {{curso.nombre_curso}}
-                    {{curso.propietario}}
-                {% endfor %}
-                <h3>Tipo</h3>
-                {% for usuario in usuarios %}
-                    {{usario.info_cuenta.tipo}}
-                {% endfor %}
-            </div>
+            {% endfor %}    
         </div>
     </div>
 

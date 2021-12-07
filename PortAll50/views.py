@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -36,27 +36,51 @@ def register(request):
 
     messages.success(request, "User saved." )
 
-    return HttpResponseRedirect(reverse("portall"))
+    return HttpResponseRedirect(reverse("login"))
 
 def portall(request):
-
-    propietario = request.user
     
     context = {
-        "usuarios": User.objects.all(),
-        "propietario": propietario,
-        "cursos": Curso.objects.all(),
+        "cursos": Curso.objects.all()
     }
 
     return render(request, "portall50/portall.html", context)
 
+def agregarCurso(request):
+
+    context = {
+        "estudiantes": User.objects.filter(info_cuenta__tipo="1")
+    }
+
+    return render(request, "portall50/agregarCurso.html", context)
+
 def registrarCurso(request):
     nombre_curso = request.POST.get("nombre_curso")
-    estudiantes_curso = request.POST.get("estudiantes_curso")
+    estudiantes_curso = request.POST.getlist("estudiantes_curso")
     propietario_curso = request.POST.get("propietario_curso")
+    txtImagen = request.FILES.get("txtImagen")
 
-    user = User.objects.get(username=propietario_curso)
+    propietario = User.objects.filter(pk=propietario_curso)
 
-    curso = Curso.objects.create(nombre_curso=nombre_curso, propietario=user)
+    propietario = propietario[0]
+
+    #el objeto creado primero
+    curso = Curso.objects.create(nombre_curso=nombre_curso, propietario=propietario, imagen=txtImagen)
+
+    for estudianteID in estudiantes_curso:
+        estudiante = User.objects.get(pk=estudianteID)
+
+        if estudiante:
+            curso.cuentas.add(estudiante)
+
+    curso.cuentas.add(propietario)
 
     return redirect("/portall")
+
+def curso(request, id_curso):
+
+    context = {
+        "curso": Curso.objects.get(id=id_curso),
+    }
+
+    return render(request, "PortAll50/curso.html", context)

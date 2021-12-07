@@ -6,7 +6,7 @@ from django.db.models.fields.related import ManyToManyField
 
 # Create your models here.
 class Cuenta(models.Model):
-    username = models.ForeignKey(User, on_delete=CASCADE, related_name="info_cuenta")
+    username = models.OneToOneField(User, on_delete=CASCADE, related_name="info_cuenta")
     TIPO = [("1", "Estudiante"), ("2", "Docente")]
     tipo = models.CharField(max_length=1 ,choices=TIPO, default=1)
     imagen = models.ImageField(upload_to='users/', null = True) #investigar upload_to
@@ -19,14 +19,15 @@ class Cuenta(models.Model):
 
 class Curso(models.Model):
     nombre_curso = models.CharField(max_length=60)
-    cuentas = models.ManyToManyField(Cuenta, related_name="cursos_inscritos", null=True) #identifica participantes 
+    cuentas = models.ManyToManyField(User, related_name="cursos_inscritos", null=True) #identifica participantes 
     propietario = models.ForeignKey(User, on_delete=CASCADE, related_name="cursos_creados")
+    imagen = models.ImageField(upload_to='cursos/', null = True) #investigar upload_to
 
     class Meta:
         verbose_name_plural = "Curso"
 
     def __str__(self):
-        return f"{self.nombre_curso} {self.cuentas} {self.propietario}"
+        return f"{self.nombre_curso} {self.cuentas.all} {self.propietario}"
 
 class Material(models.Model):
     nombre_material = models.CharField(max_length=60)
