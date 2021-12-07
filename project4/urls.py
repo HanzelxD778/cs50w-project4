@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from PortAll50.views import index
 from project4.views import my_profile
+from django.conf.urls.static import static
+from .settings import MEDIA_ROOT, MEDIA_URL
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,3 +27,5 @@ urlpatterns = [
     path("", include("PortAll50.urls")),
     path('accounts/profile/', my_profile),
 ]
+
+urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

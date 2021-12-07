@@ -1,0 +1,61 @@
+{% extends 'registration.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block title %}
+    Registrarse
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            
+        </div>
+        <div class="col-lg-4 abs-center formulario1">
+            <form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1 class="text-center blanco">Crear una cuenta</h1>
+                <div class="form-group">
+                    <input placeholder="Nombres" name="firstName" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autofocus required>
+                </div>
+                <div class="form-group">
+                    <input placeholder="Apellidos" name="lastName" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                </div>
+                <div class="form-group">
+                  <input placeholder="Correo electronico" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                </div>
+                <div class="form-group">
+                    <input placeholder="Nombre de usuario" name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                </div>
+                <div class="form-group">
+                  <input placeholder="Contraseña" name="password" type="password" class="form-control" id="exampleInputPassword1" required>
+                </div>
+                <label class="blanco">Escoga el tipo de cuenta: </label>
+                <select class="form-control" id="exampleFormControlSelect1" name="tipo_cuenta">}
+                    <option value="1">Estudiante</option>
+                    <option value="2">Docente</option>
+                </select>
+                <div class="input-group">
+                    <div class="custom-file">
+                      <input name="txtImagen" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                      <label class="custom-file-label" for="inputGroupFile04">Sube una imagen de perfil</label>
+                    </div>
+                  </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+                <a role="button" class="btn btn-success" href="{% url 'login' %}">Go back to log in</a>
+            </form>
+        </div>
+        <div class="col-lg-4">
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
