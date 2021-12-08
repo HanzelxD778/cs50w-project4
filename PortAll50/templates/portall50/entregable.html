@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block title %}
+    PortAll50
+{% endblock %}
+
+{% block css %}
+    
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <a href="{{entregable.archivo.url}}">{{entregable.nombre_entregable}}</a> <br>
+            {{entregable.comentario}}
+
+            <form method="POST" action="{% url 'agregarEntrega' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                        <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aqui</label>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

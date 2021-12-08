@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso
+from . models import Cuenta, Curso, Material, Entregable
 
 # Create your views here.
 def index(request):
@@ -82,8 +82,50 @@ def registrarCurso(request):
 
 def curso(request, id_curso):
 
+    curso = Curso.objects.get(id=id_curso)
+    materiales = Material.objects.filter(curso= curso)
+    entregables = Entregable.objects.filter(curso=curso)
+
     context = {
-        "curso": Curso.objects.get(id=id_curso),
+        "curso": curso,
+        "materiales": materiales,
+        "entregables": entregables
     }
 
     return render(request, "PortAll50/curso.html", context)
+
+def agregarMaterial(request):
+    nombre_material = request.POST.get("nombre_material")
+    archivo = request.FILES.get("archivo")
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(pk=curso_id)
+
+    material = Material.objects.create(nombre_material=nombre_material, archivo=archivo, curso=curso)
+
+    return redirect("/portall")
+
+def agregarEntregable(request):
+    nombre_entregable = request.POST.get("nombre_entregable")
+    archivo = request.FILES.get("archivo")
+    comentario = request.POST.get("comentario")
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(pk=curso_id)
+
+    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, curso=curso)
+
+    return redirect("/portall")
+
+def entregable(request, id_entregable):
+    entregable = Entregable.objects.get(id=id_entregable)
+
+    context = {
+        "entregable": entregable
+    }
+
+    return render(request, "PortAll50/entregable.html", context)
+
+def agregarEntrega(request):
+    archivo_entrega = request.POST.get("archivo_entrega")
+    #entregable y cuenta

@@ -32,7 +32,7 @@ class Curso(models.Model):
 class Material(models.Model):
     nombre_material = models.CharField(max_length=60)
     archivo = models.FileField(upload_to='materiales/', blank=True) #ver video axel
-    enlace = models.URLField() #investigar
+    enlace = models.URLField(null=True) #investigar
     curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="materiales")
 
     class Meta:
@@ -92,25 +92,25 @@ class Entregable(models.Model):
     nombre_entregable = models.CharField(max_length=30)
     archivo = models.FileField(upload_to='entregables/', blank=True) #ver video axel
     comentario = models.CharField(max_length=100)
-    tiempo_disp_desde = models.DateTimeField() 
-    tiempo_disp_hasta = models.DateTimeField()
-    tiempo_ver_desde = models.DateTimeField()
-    tiempo_ver_para = models.DateTimeField()
-    ESTADO_ENTREGA = [("0", "Colocada"), ("1", "Mostrar"), ("2", "Recibida")]
-    estado_entrega = models.CharField(choices=ESTADO_ENTREGA, max_length=1, default="0")
+    #tiempo_disp_desde = models.DateTimeField() 
+    #tiempo_disp_hasta = models.DateTimeField()
+    #tiempo_ver_desde = models.DateTimeField()
+    #tiempo_ver_para = models.DateTimeField()
+    ESTADO_ENTREGA = [("1", "Mostrar"), ("2", "Recibida")]
+    estado_entrega = models.CharField(choices=ESTADO_ENTREGA, max_length=1, default="1")
     curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="entregables")
-    nota = models.DecimalField(decimal_places=2, max_digits=5)
+    nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
 
     class Meta:
         verbose_name_plural = "Entregable"
 
     def __str__(self):
-        return f"{self.nombre_entregable} {self.archivo} {self.comentario} {self.tiempo_disp_desde} {self.tiempo_disp_hasta} {self.tiempo_ver_desde} {self.tiempo_ver_para} {self.estado_entrega} {self.curso} {self.nota}"
+        return f"{self.nombre_entregable} {self.archivo} {self.comentario} {self.estado_entrega} {self.curso} {self.nota}"
 
 class Entrega(models.Model):
     archivo_entrega = models.FileField(upload_to="entregas/%Y/%m/%d", blank=True) #ver video axel
-    tiempo_entregado = models.DateTimeField()
-    nota = models.DecimalField(decimal_places=2, max_digits=5)
+    tiempo_entregado = models.DateTimeField(auto_now_add=True)
+    nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     entregable = models.ForeignKey(Entregable, on_delete=CASCADE, related_name="entregas")
     cuenta = models.ForeignKey(Cuenta, on_delete=CASCADE, related_name="entregas")
 
