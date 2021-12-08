@@ -40,8 +40,11 @@ def register(request):
 
 def portall(request):
     
+    usuario = request.user
+
     context = {
-        "cursos": Curso.objects.all()
+        "cursos": Curso.objects.all(),
+        "usuario": Cuenta.objects.get(username=usuario)
     }
 
     return render(request, "portall50/portall.html", context)
