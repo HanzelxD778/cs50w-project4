@@ -93,7 +93,7 @@ class Entregable(models.Model):
     archivo = models.FileField(upload_to='entregables/', blank=True) #ver video axel
     comentario = models.CharField(max_length=100)
     #tiempo_disp_desde = models.DateTimeField() 
-    #tiempo_disp_hasta = models.DateTimeField()
+    tiempo_disp_hasta = models.DateTimeField(null=True)
     #tiempo_ver_desde = models.DateTimeField()
     #tiempo_ver_para = models.DateTimeField()
     ESTADO_ENTREGA = [("1", "Mostrar"), ("2", "Recibida")]

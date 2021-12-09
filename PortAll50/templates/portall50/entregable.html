@@ -16,19 +16,38 @@
 {% block main %}
     <div class="container">
         <div class="row">
-            <a href="{{entregable.archivo.url}}">{{entregable.nombre_entregable}}</a> <br>
-            {{entregable.comentario}}
-
-            <form method="POST" action="{% url 'agregarEntrega' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="input-group">
-                    <div class="custom-file">
-                        <input name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                        <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aqui</label>
+            <div class="col-lg-4">
+                <h5>Asignación</h5>
+                <a href="{{entregable.archivo.url}}">{{entregable.nombre_entregable}}</a> <br>
+                {{entregable.comentario}} <br>
+                Fehca limite de entrega: {{entregable.tiempo_disp_hasta}}
+            </div>
+            <div class="col-lg-4">
+                <h5>Subir entrega</h5>
+                <form method="POST" action="{% url 'agregarEntrega' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                            <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aqui</label>
+                        </div>
+                        <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                        value="{{entregable.id}}" readonly placeholder="Default input">
+                        <input name='id_cuenta' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                        value="{{user.id}}" readonly placeholder="Default input">
                     </div>
-                </div>
-            </form>
-            
+                    <button type="submit" class="btn btn-success">Enviar entrega</button>
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <h5>Ver entregas hechas</h5>
+                {% for entre in entregas %}
+                    <a target="_blank" href="{{entre.archivo_entrega.url}}">{{entre.archivo_entrega}}</a>
+                    <p>{{entre.tiempo_entregado}}</p>
+                    <p>Entregado por: {{entre.cuenta.username}}</p>
+                    <br>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

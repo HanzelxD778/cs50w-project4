@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Material, Entregable
+from . models import Cuenta, Curso, Entrega, Material, Entregable
+from datetime import datetime
 
 # Create your views here.
 def index(request):
@@ -110,22 +111,45 @@ def agregarEntregable(request):
     archivo = request.FILES.get("archivo")
     comentario = request.POST.get("comentario")
     curso_id = request.POST.get("curso_id")
+    date = request.POST.get("date")
+    time = request.POST.get("time")
+
+    fecha_hora = f"{date}T{time}" 
+
+    print(fecha_hora)
+
+    fecha = datetime.fromisoformat(fecha_hora)
+    #datetime.fromisoformat('2011-11-04T00:05:23')
 
     curso = Curso.objects.get(pk=curso_id)
 
-    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, curso=curso)
+    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,curso=curso)
 
     return redirect("/portall")
 
 def entregable(request, id_entregable):
     entregable = Entregable.objects.get(id=id_entregable)
+    entregas = Entrega.objects.filter(entregable=entregable)
 
     context = {
-        "entregable": entregable
+        "entregable": entregable,
+        "entregas": entregas
     }
 
     return render(request, "PortAll50/entregable.html", context)
 
 def agregarEntrega(request):
-    archivo_entrega = request.POST.get("archivo_entrega")
-    #entregable y cuenta
+    archivo_entrega = request.FILES.get("archivo_entrega")
+    id_entregable = request.POST.get("id_entregable")
+    id_cuenta = request.POST.get("id_cuenta")
+
+    entregable = Entregable.objects.get(id=id_entregable)
+
+    cuenta = User.objects.get(id=id_cuenta)
+
+    agregarEntrega = Entrega.objects.create(archivo_entrega=archivo_entrega, entregable=entregable, cuenta=cuenta.info_cuenta)
+
+    return redirect("/portall")
+
+def agregarForo(request):
+    pass

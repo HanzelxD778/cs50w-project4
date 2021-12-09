@@ -1,0 +1,38 @@
+/*Desarrollar la automatizacion de un sistema de una nomina de pagos y con esto poder ayudar a las empresas 
+al planeamiento de las vacaciones y realizar sus pagos, con esto nosotros queremos brindar una solucion ingenisa y reducir 
+costos a la empresa que lo implemente
+
+Somos un grupo de desarrolladores que busca ayudar a empresas con la automatizacion de pagos de nomina, brindando soluciones
+ingeniosas a fin de lograr un maximo rendimiento*/
+
+Vision de proyecto{
+    Desarrollar una app que proporcine la automatizacion de un sistema de pagos
+}
+
+Stakeholders{
+    Departamento de recursos humanos
+    Personal
+}
+
+Justificacion del proyecto{
+   Razonamiento del proyecto{
+   	Contador (Determina horarios u horas extras para añadirlo en la nomina)
+	Patente del sistema de la empresa
+   }
+   Necesidades del negocio{
+   	Automatizacion
+   }
+   Beneficios del proyecto{
+	Ahorro de tiempo para la administracion de los pagos
+	Mejora la reputacion e imagen de la empresa
+	Acceso a más fuentes de financiemanto/patrocinamiento
+	Reduccion de costos e incrementos en la productividad en el area de RRHH
+	Mejora la gestion interna de la organizacion e incrimienta la satisfaccion por parte 
+		de los trabajadores
+   }
+   Riesgos mayores{
+	Financiamento del proyecto
+	Insatisfaccion por parte de la empresa con el proyecto realizado
+	Rendimiento de la aplicacion en los distintos dispositovos android
+   }
+}

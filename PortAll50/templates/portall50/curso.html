@@ -49,10 +49,66 @@
         </div>
     </div>
 
-    <!-- MODAL AGREGAR ENTREGABLE -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                
+            </div>
+            <div class="col-lg-4">
+                
+            </div>
+            <div class="col-lg-4">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarForo">
+                    Agregar un foro
+                </button>
+                <br>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AGREGAR ENTREGABLE 
+    <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+            ..Modal..
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">
+                        Agregar un archivo o enlace
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
+                    </div>
+                    <p>El archivito va aquí xd</p>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                            <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
+                        </div>
+                    </div>
+                    <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                    value="{{curso.id}}" readonly placeholder="Default input">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </form>-->
+
+    <!-- MODAL AGREGAR ENTREGABLE 
     <form method="POST" action="{% url 'agregarEntregable' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <!-- Modal -->
+            ..MODAL..
         <div class="modal fade" id="agregarEntregable" tabindex="-1" aria-labelledby="agregarEntregableLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -78,6 +134,8 @@
                     <div class="form-group">
                         <input required type="text" name="comentario" class="form-control" placeholder="Comentario sobre la asignación" autocomplete="off">
                     </div>
+                    <input type="date" name="date">
+                    <input type="time" name="time">
                     <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
                     value="{{curso.id}}" readonly placeholder="Default input">
                 </div>
@@ -87,18 +145,18 @@
                 </div>
             </div>
         </div>
-    </form>
+    </form>-->
 
-    <!-- MODAL AGREGAR ENTREGABLE -->
-    <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
+    <!-- MODAL AGREGAR FORO -->
+    <form method="POST" action="{% url 'agregarForo' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="agregarForo" tabindex="-1" aria-labelledby="agregarForoLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="exampleModalLabel">
-                        Agregar un archivo o enlace
+                    <h5 class="modal-title text-center" id="agregarForoLabel">
+                        Agregar un Foro
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -106,7 +164,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
+                        <input required type="text" name="nombre_entregable" class="form-control" placeholder="Nombre del entregable" autocomplete="off">
                     </div>
                     <p>El archivito va aquí xd</p>
                     <div class="input-group">
@@ -115,6 +173,11 @@
                             <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <input required type="text" name="comentario" class="form-control" placeholder="Comentario sobre la asignación" autocomplete="off">
+                    </div>
+                    <input type="date" name="date">
+                    <input type="time" name="time">
                     <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
                     value="{{curso.id}}" readonly placeholder="Default input">
                 </div>

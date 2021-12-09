@@ -13,5 +13,6 @@ urlpatterns = [
     path("agregarMaterial", views.agregarMaterial, name="agregarMaterial"),
     path("agregarEntregable", views.agregarEntregable, name="agregarEntregable"),
     path("entregable/<int:id_entregable>", views.entregable, name="entregable"),
-    path("agregarEntrega", views.agregarEntrega, name="agregarEntrega")
+    path("agregarEntrega", views.agregarEntrega, name="agregarEntrega"),
+    path("agregarForo", views.agregarForo, name="agregarForo")
 ]
