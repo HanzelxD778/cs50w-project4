@@ -15,5 +15,6 @@ urlpatterns = [
     path("entregable/<int:id_entregable>", views.entregable, name="entregable"),
     path("agregarEntrega", views.agregarEntrega, name="agregarEntrega"),
     path("agregarForo", views.agregarForo, name="agregarForo"),
-    path("foro/<int:id_foro>", views.foro, name="foro")
+    path("foro/<int:id_foro>", views.foro, name="foro"),
+    path("respuestaForo", views.respuestaForo, name="respuestaForo")
 ]

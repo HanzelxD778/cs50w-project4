@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo
 from datetime import datetime
 
 # Create your views here.
@@ -170,9 +170,23 @@ def agregarForo(request):
 
 def foro(request, id_foro):
     foro = Foro.objects.get(id=id_foro)
+    respuestasForo = RespuestaForo.objects.filter(foro=foro)
 
     context = {
-        "foro": foro
+        "foro": foro,
+        "respuestasForo": respuestasForo
     }
 
     return render(request, "PortAll50/foro.html", context)
+
+def respuestaForo(request):
+    respuesa_foro = request.POST.get("respuesa_foro")
+    id_foro = request.POST.get("id_foro")
+    id_cuenta = request.POST.get("id_cuenta")
+
+    foro = Foro.objects.get(id=id_foro)
+    cuenta = User.objects.get(id=id_cuenta)
+
+    entrega = RespuestaForo.objects.create(respuesa_foro=respuesa_foro, foro=foro, cuenta=cuenta.info_cuenta)
+
+    return redirect("/portall")

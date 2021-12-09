@@ -17,13 +17,31 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-                {{foro.nombre_foro}}
+                <p>{{foro.nombre_foro}}</p>
+                <p>{{foro.asignacion_foro}}</p>
+                <p>{{foro.fecha_vencimiento}}</p>
             </div>
             <div class="col-lg-4">
-                
+                <form method="POST" action="{% url 'respuestaForo' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <div class="form-group">
+                            <input required type="text" name="respuesa_foro" class="form-control" placeholder="Responder al foro" autocomplete="off">
+                        </div>
+                        <input name='id_foro' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                        value="{{foro.id}}" readonly placeholder="Default input">
+                        <input name='id_cuenta' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                        value="{{user.id}}" readonly placeholder="Default input">
+                    </div>
+                    <button type="submit" class="btn btn-success">Subir respuesta</button>
+                </form>
             </div>
             <div class="col-lg-4">
-                
+                {% for respuesta in respuestasForo %}
+                    <p>{{respuesta.respuesa_foro}}</p>
+                    <p>Entregado el: {{respuesta.fecha_respuesta}}</p>
+                    <p>{{respuesta.cuenta.username}}</p>
+                {% endfor %}
             </div>
         </div>
     </div>

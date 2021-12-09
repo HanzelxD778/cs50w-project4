@@ -29,89 +29,58 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                     Agregar un archivo o enlace
                 </button>
+                <!-- MODAL AGREGAR MATERIAL -->
+                <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                        
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="exampleModalLabel">
+                                    Agregar un archivo o enlace
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
+                                </div>
+                                <p>El archivito va aquí xd</p>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                        <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
+                                    </div>
+                                </div>
+                                <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                value="{{curso.id}}" readonly placeholder="Default input">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <br>
-                {% for material in materiales %}
+                
+            </div>
+            {% for material in materiales %}
                     <a target="_blank" href="{{material.archivo.url}}">{{material.nombre_material}}</a>
                     <br>
                 {% endfor %}
-            </div>
             <div class="col-lg-4">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarEntregable">
                     Agregar un entregable
                 </button>
-                <br>
-                {% for entregable in entregables %}
-                    <a href="{% url 'entregable' entregable.id %}">{{entregable.nombre_entregable}}</a>
-                    <br>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                
-            </div>
-            <div class="col-lg-4">
-                
-            </div>
-            <div class="col-lg-4">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarForo">
-                    Agregar un foro
-                </button>
-                <br>
-                {% for foro in foros %}
-                    <a href="{% url 'foro' foro.id %}">{{foro.nombre_foro}}</a>
-                    <br>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL AGREGAR ENTREGABLE 
-    <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-            ..Modal..
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center" id="exampleModalLabel">
-                        Agregar un archivo o enlace
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
-                    </div>
-                    <p>El archivito va aquí xd</p>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                            <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
-                        </div>
-                    </div>
-                    <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                    value="{{curso.id}}" readonly placeholder="Default input">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </form>-->
-
-    <!-- MODAL AGREGAR ENTREGABLE 
+                <!-- MODAL AGREGAR ENTREGABLE -->
     <form method="POST" action="{% url 'agregarEntregable' %}" enctype="multipart/form-data">
         {% csrf_token %}
-            ..MODAL..
+            
         <div class="modal fade" id="agregarEntregable" tabindex="-1" aria-labelledby="agregarEntregableLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -148,7 +117,41 @@
                 </div>
             </div>
         </div>
-    </form>-->
+    </form>
+                <br>
+                
+            </div>
+        </div>
+    </div>
+    {% for entregable in entregables %}
+                    <a href="{% url 'entregable' entregable.id %}">{{entregable.nombre_entregable}}</a>
+                    <br>
+                {% endfor %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                
+            </div>
+            <div class="col-lg-4">
+                
+            </div>
+            <div class="col-lg-4">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarForo">
+                    Agregar un foro
+                </button>
+                <br>
+                {% for foro in foros %}
+                    <a href="{% url 'foro' foro.id %}">{{foro.nombre_foro}}</a>
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    
+
+    
 
     <!-- MODAL AGREGAR FORO -->
     <form method="POST" action="{% url 'agregarForo' %}" enctype="multipart/form-data">

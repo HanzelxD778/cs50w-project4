@@ -56,7 +56,7 @@ class Foro(models.Model):
 class RespuestaForo(models.Model):
     respuesa_foro = models.CharField(max_length=1000)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
-    nota = models.DecimalField(decimal_places=2, max_digits=5)
+    nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     foro = models.ForeignKey(Foro, on_delete=CASCADE, related_name="respuestas")
     cuenta = models.ForeignKey(Cuenta, on_delete=CASCADE, related_name="respuestas")
 
