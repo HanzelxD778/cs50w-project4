@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion
 from datetime import datetime
 
 # Create your views here.
@@ -84,15 +84,15 @@ def registrarCurso(request):
 def curso(request, id_curso):
 
     curso = Curso.objects.get(id=id_curso)
-    materiales = Material.objects.filter(curso= curso)
-    entregables = Entregable.objects.filter(curso=curso)
-    foros = Foro.objects.filter(curso=curso)
+    #materiales = Material.objects.filter(seccion__curso=curso)
+    #entregables = Entregable.objects.filter(seccion__curso=curso)
+    #foros = Foro.objects.filter(seccion__curso=curso)
 
     context = {
-        "curso": curso,
-        "materiales": materiales,
-        "entregables": entregables,
-        "foros": foros
+        "curso": curso
+        #"materiales": materiales,
+        #"entregables": entregables,
+        #"foros": foros
     }
 
     return render(request, "PortAll50/curso.html", context)
@@ -100,32 +100,37 @@ def curso(request, id_curso):
 def agregarMaterial(request):
     nombre_material = request.POST.get("nombre_material")
     archivo = request.FILES.get("archivo")
-    curso_id = request.POST.get("curso_id")
+    seccion_id = request.POST.get("seccion_id")
+    id_curso = request.POST.get("curso_id")
 
-    curso = Curso.objects.get(pk=curso_id)
+    seccion = Seccion.objects.get(pk=seccion_id)
 
-    material = Material.objects.create(nombre_material=nombre_material, archivo=archivo, curso=curso)
+    material = Material.objects.create(nombre_material=nombre_material, archivo=archivo, seccion=seccion)
 
-    return redirect("/portall")
+    print(id_curso)
+
+    #return redirect("/portall")
+    return redirect(f"curso/{id_curso}")
 
 def agregarEntregable(request):
     nombre_entregable = request.POST.get("nombre_entregable")
     archivo = request.FILES.get("archivo")
     comentario = request.POST.get("comentario")
-    curso_id = request.POST.get("curso_id")
     date = request.POST.get("date")
     time = request.POST.get("time")
+    seccion_id = request.POST.get("seccion_id")
+    id_curso = request.POST.get("curso_id")
+
+    seccion = Seccion.objects.get(pk=seccion_id)
 
     fecha_hora = f"{date}T{time}" 
 
     fecha = datetime.fromisoformat(fecha_hora)
     #datetime.fromisoformat('2011-11-04T00:05:23')
 
-    curso = Curso.objects.get(pk=curso_id)
+    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,seccion=seccion)
 
-    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,curso=curso)
-
-    return redirect("/portall")
+    return redirect(f"curso/{id_curso}")
 
 def entregable(request, id_entregable):
     entregable = Entregable.objects.get(id=id_entregable)
@@ -154,19 +159,21 @@ def agregarEntrega(request):
 def agregarForo(request):
     nombre_foro = request.POST.get("nombre_foro")
     asignacion_foro = request.POST.get("asignacion_foro")
-    curso_id = request.POST.get("curso_id")
     date = request.POST.get("date")
     time = request.POST.get("time")
+    seccion_id = request.POST.get("seccion_id")
+    id_curso = request.POST.get("curso_id")
+
+    seccion = Seccion.objects.get(pk=seccion_id)
     
-    curso = Curso.objects.get(pk=curso_id)
     fecha_hora = f"{date}T{time}" 
 
     fecha = datetime.fromisoformat(fecha_hora)
     #datetime.fromisoformat('2011-11-04T00:05:23')
 
-    foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, curso=curso)
+    foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, seccion=seccion)
 
-    return redirect("/portall")
+    return redirect(f"curso/{id_curso}")
 
 def foro(request, id_foro):
     foro = Foro.objects.get(id=id_foro)
