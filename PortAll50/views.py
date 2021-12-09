@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Material, Entregable
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable
 from datetime import datetime
 
 # Create your views here.
@@ -86,11 +86,13 @@ def curso(request, id_curso):
     curso = Curso.objects.get(id=id_curso)
     materiales = Material.objects.filter(curso= curso)
     entregables = Entregable.objects.filter(curso=curso)
+    foros = Foro.objects.filter(curso=curso)
 
     context = {
         "curso": curso,
         "materiales": materiales,
-        "entregables": entregables
+        "entregables": entregables,
+        "foros": foros
     }
 
     return render(request, "PortAll50/curso.html", context)
@@ -115,8 +117,6 @@ def agregarEntregable(request):
     time = request.POST.get("time")
 
     fecha_hora = f"{date}T{time}" 
-
-    print(fecha_hora)
 
     fecha = datetime.fromisoformat(fecha_hora)
     #datetime.fromisoformat('2011-11-04T00:05:23')
@@ -152,4 +152,27 @@ def agregarEntrega(request):
     return redirect("/portall")
 
 def agregarForo(request):
-    pass
+    nombre_foro = request.POST.get("nombre_foro")
+    asignacion_foro = request.POST.get("asignacion_foro")
+    curso_id = request.POST.get("curso_id")
+    date = request.POST.get("date")
+    time = request.POST.get("time")
+    
+    curso = Curso.objects.get(pk=curso_id)
+    fecha_hora = f"{date}T{time}" 
+
+    fecha = datetime.fromisoformat(fecha_hora)
+    #datetime.fromisoformat('2011-11-04T00:05:23')
+
+    foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, curso=curso)
+
+    return redirect("/portall")
+
+def foro(request, id_foro):
+    foro = Foro.objects.get(id=id_foro)
+
+    context = {
+        "foro": foro
+    }
+
+    return render(request, "PortAll50/foro.html", context)
