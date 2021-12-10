@@ -40,13 +40,21 @@
                 </form>
             </div>
             <div class="col-lg-4">
-                <h5>Ver entregas hechas</h5>
-                {% for entre in entregas %}
-                    <a target="_blank" href="{{entre.archivo_entrega.url}}">{{entre.archivo_entrega}}</a>
-                    <p>{{entre.tiempo_entregado}}</p>
-                    <p>Entregado por: {{entre.cuenta.username}}</p>
-                    <br>
-                {% endfor %}
+                {% if user.info_cuenta.tipo == "1" %}
+                    <h5>Ver entregas hechas</h5>
+                    {% for entre in entregas %}
+                        <a target="_blank" href="{{entre.archivo_entrega.url}}">{{entre.archivo_entrega}}</a>
+                        <p>{{entre.tiempo_entregado}}</p>
+                        <p>Entregado por: {{entre.cuenta.username}}</p>
+                        <br>
+                    {% endfor %}
+                {% endif %}
+                {% if user.info_cuenta.tipo == "3" %}
+                    <a target="_blank" href="{{user.info_cuenta.entregas.archivo_entrega.url}}">{{user.info_cuenta.entregas.archivo_entrega}}</a>
+                    <p>{{user.entregas.tiempo_entregado}}</p>
+                    <p>Entregado por: {{user.username}}</p>
+                {% endif %}
+                {{user.info_cuenta.entregas}}
             </div>
         </div>
     </div>
