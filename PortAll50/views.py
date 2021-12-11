@@ -43,8 +43,10 @@ def portall(request):
     
     usuario = request.user
 
+    cursos = Curso.objects.filter(cuentas=usuario)
+
     context = {
-        "cursos": Curso.objects.all(),
+        "cursos": cursos,
         "usuario": Cuenta.objects.get(username=usuario)
     }
 
@@ -135,10 +137,28 @@ def agregarEntregable(request):
 def entregable(request, id_entregable):
     entregable = Entregable.objects.get(id=id_entregable)
     entregas = Entrega.objects.filter(entregable=entregable)
+    estudiante = User.objects.get(username=request.user)
+
+    try:
+        entregas_usuario = Entrega.objects.filter(entregable=entregable)
+    except:
+        entregas_usuario = "8"
+
+    for entrega in entregas_usuario:
+        if entrega.cuenta == estudiante:
+            envio = entrega
+
+    try:
+        print(envio)
+    except:
+        envio = entregas_usuario
 
     context = {
         "entregable": entregable,
-        "entregas": entregas
+        "entregas": entregas,
+        "entregas_usuario": entregas_usuario,
+        "estudiante": estudiante,
+        "envio": envio
     }
 
     return render(request, "PortAll50/entregable.html", context)
@@ -147,12 +167,13 @@ def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")
     id_entregable = request.POST.get("id_entregable")
     id_cuenta = request.POST.get("id_cuenta")
+    estado_entrega = "1"
 
     entregable = Entregable.objects.get(id=id_entregable)
 
     cuenta = User.objects.get(id=id_cuenta)
 
-    agregarEntrega = Entrega.objects.create(archivo_entrega=archivo_entrega, entregable=entregable, cuenta=cuenta.info_cuenta)
+    agregarEntrega = Entrega.objects.create(archivo_entrega=archivo_entrega, entregable=entregable, cuenta=cuenta, estado_entrega=estado_entrega)
 
     return redirect("/portall")
 
@@ -195,5 +216,15 @@ def respuestaForo(request):
     cuenta = User.objects.get(id=id_cuenta)
 
     entrega = RespuestaForo.objects.create(respuesa_foro=respuesa_foro, foro=foro, cuenta=cuenta.info_cuenta)
+
+    return redirect("/portall")
+
+def agregarSeccion(request):
+    nombre_seccion = request.POST.get("nombre_seccion")
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(id=curso_id)
+
+    seccion = Seccion.objects.create(nombre=nombre_seccion, curso=curso)
 
     return redirect("/portall")

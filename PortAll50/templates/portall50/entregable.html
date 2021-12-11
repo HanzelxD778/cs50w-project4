@@ -28,7 +28,7 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <div class="custom-file">
-                            <input name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                            <input required name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
                             <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aqui</label>
                         </div>
                         <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
@@ -36,11 +36,24 @@
                         <input name='id_cuenta' class="form-control" style="background: transparent;  border: none;" type="hidden"
                         value="{{user.id}}" readonly placeholder="Default input">
                     </div>
+                
+                    {% if user.info_cuenta.tipo == "2" %}
+                        <button type="button" class="btn btn-primary mt-2">Docente</button>
+                    {% else %}
+                        {% for enviado in entregas_usuario %}
+                            {% if enviado %}
+                                <button type="button" class="btn btn-primary mt-2">Entrega realizada</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-success">Enviar entrega</button>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     <button type="submit" class="btn btn-success">Enviar entrega</button>
+
                 </form>
             </div>
             <div class="col-lg-4">
-                {% if user.info_cuenta.tipo == "1" %}
+                {% if user.info_cuenta.tipo == "2" %}
                     <h5>Ver entregas hechas</h5>
                     {% for entre in entregas %}
                         <a target="_blank" href="{{entre.archivo_entrega.url}}">{{entre.archivo_entrega}}</a>
@@ -49,12 +62,15 @@
                         <br>
                     {% endfor %}
                 {% endif %}
-                {% if user.info_cuenta.tipo == "3" %}
-                    <a target="_blank" href="{{user.info_cuenta.entregas.archivo_entrega.url}}">{{user.info_cuenta.entregas.archivo_entrega}}</a>
-                    <p>{{user.entregas.tiempo_entregado}}</p>
-                    <p>Entregado por: {{user.username}}</p>
+                {% if user.info_cuenta.tipo == "1" %}
+                    {% for entrega in entregas_usuario %}
+                        {% if entrega.cuenta == estudiante %}
+                            <a target="_blank" href="{{entrega.archivo_entrega.url}}">{{entrega.archivo_entrega}}</a>
+                            <p>{{entrega.tiempo_entregado}}</p>
+                            <p>Entregado por: {{user.username}}</p>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
-                {{user.info_cuenta.entregas}}
             </div>
         </div>
     </div>

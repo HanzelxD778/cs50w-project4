@@ -132,13 +132,16 @@ class Entrega(models.Model):
     tiempo_entregado = models.DateTimeField(auto_now_add=True)
     nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     entregable = models.ForeignKey(Entregable, on_delete=CASCADE, related_name="entregas")
-    cuenta = models.ForeignKey(Cuenta, on_delete=CASCADE, related_name="entregas")
+    cuenta = models.ForeignKey(User, on_delete=CASCADE, related_name="entregas")
+    ESTADO_ENTREGA = [("0", "No enviada"), ("1", "Enviada")]
+    estado_entrega = models.CharField(choices=ESTADO_ENTREGA, max_length=1, default="0")
+
 
     class Meta:
         verbose_name_plural = "Entrega"
 
     def __str__(self):
-        return f"{self.archivo_entrega} {self.tiempo_entregado} {self.nota} {self.entregable} {self.cuenta}"
+        return f"{self.archivo_entrega} {self.tiempo_entregado} {self.nota} {self.entregable} {self.cuenta} {self.estado_entrega}"
 
 ##########################################################################################
 #                                  HACER CUESTIONARIO

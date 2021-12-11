@@ -10,23 +10,45 @@
 {% endblock %}
 
 {% block css %}
-    
+
 {% endblock %}
 
 {% block main %}
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-                <p>{{foro.nombre_foro}}</p>
-                <p>{{foro.asignacion_foro}}</p>
-                <p>{{foro.fecha_vencimiento}}</p>
+                <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                    <div class="card-title card-header">{{foro.nombre_foro}}</div>
+                    <div class="card-body">
+                        <p class="card-text"><p>{{foro.asignacion_foro}}</p>
+                        <p>Vence el: {{foro.fecha_vencimiento}}</p>
+                    </div>
+                  </div>
+                </div>
+            <div class="col-lg-4">
+                {% for respuesta in respuestasForo %}
+                    <div class="card w-95">
+                        <div class="card-header">
+                            Respuesta a: {{foro.nombre_foro}}
+                        </div>
+                        <div class="card-body">
+                            <div class="circulo">
+                                <img class="imagen" src="{{user.info_cuenta.imagen.url}}" class="card-img-top">
+                            </div>
+                            <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
+                            <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                        </div>
+                    </div>   
+                    <br>
+                {% endfor %}
             </div>
             <div class="col-lg-4">
                 <form method="POST" action="{% url 'respuestaForo' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="input-group">
                         <div class="form-group">
-                            <input required type="text" name="respuesa_foro" class="form-control" placeholder="Responder al foro" autocomplete="off">
+                            <label for="exampleFormControlTextarea1">Responder al foro</label>
+                            <textarea required name="respuesa_foro" class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                         </div>
                         <input name='id_foro' class="form-control" style="background: transparent;  border: none;" type="hidden"
                         value="{{foro.id}}" readonly placeholder="Default input">
@@ -35,13 +57,6 @@
                     </div>
                     <button type="submit" class="btn btn-success">Subir respuesta</button>
                 </form>
-            </div>
-            <div class="col-lg-4">
-                {% for respuesta in respuestasForo %}
-                    <p>{{respuesta.respuesa_foro}}</p>
-                    <p>Entregado el: {{respuesta.fecha_respuesta}}</p>
-                    <p>{{respuesta.cuenta.username}}</p>
-                {% endfor %}
             </div>
         </div>
     </div>
