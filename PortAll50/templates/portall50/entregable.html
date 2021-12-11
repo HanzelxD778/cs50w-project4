@@ -40,16 +40,16 @@
                     {% if user.info_cuenta.tipo == "2" %}
                         <button type="button" class="btn btn-primary mt-2">Docente</button>
                     {% else %}
-                        {% for enviado in entregas_usuario %}
-                            {% if enviado %}
-                                <button type="button" class="btn btn-primary mt-2">Entrega realizada</button>
-                            {% else %}
-                                <button type="submit" class="btn btn-success">Enviar entrega</button>
-                            {% endif %}
-                        {% endfor %}
+                        {% if envio.estado_entrega == "1" %}
+                            <button type="button" class="btn btn-primary mt-2">Entrega realizada</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success">Enviar entrega</button>
+                        {% endif %}
+                        {% if not envio %}
+                            <button type="submit" class="btn btn-success">Enviar entrega</button>                
+                        {% endif %}
                     {% endif %}
-                    <button type="submit" class="btn btn-success">Enviar entrega</button>
-
+    
                 </form>
             </div>
             <div class="col-lg-4">
@@ -63,13 +63,11 @@
                     {% endfor %}
                 {% endif %}
                 {% if user.info_cuenta.tipo == "1" %}
-                    {% for entrega in entregas_usuario %}
-                        {% if entrega.cuenta == estudiante %}
-                            <a target="_blank" href="{{entrega.archivo_entrega.url}}">{{entrega.archivo_entrega}}</a>
-                            <p>{{entrega.tiempo_entregado}}</p>
-                            <p>Entregado por: {{user.username}}</p>
-                        {% endif %}
-                    {% endfor %}
+                    <a target="_blank" href="{{envio.archivo_entrega.url}}">{{envio.archivo_entrega}}</a>
+                    <p>{{envio.tiempo_entregado}}</p>
+                {% endif %}
+                {% if not envio %}
+                    <p>Todavía no se ha realizado una entrega</p>
                 {% endif %}
             </div>
         </div>

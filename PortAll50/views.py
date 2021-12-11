@@ -148,6 +148,7 @@ def entregable(request, id_entregable):
         if entrega.cuenta == estudiante:
             envio = entrega
 
+    #print(entregas_usuario)
     try:
         print(envio)
     except:
