@@ -26,10 +26,19 @@
                             <h4 class="card-title text-center">{{seccion.nombre}}</h4>
                             
                             {% if seccion.seccion_material.all %}
-                                <h5>Archivos</h5>
+                                <h5>Material</h5>
                                 <ul class="list-group">
                                     {% for material in seccion.seccion_material.all %}
-                                        <li class="list-group-item"><a target="_blank" href="{{material.archivo.url}}">{{material.nombre_material}}</a></li>
+                                        <li class="list-group-item"><a target="_blank" href="{{material.archivo.url}}"><i class="far fa-file-alt"></i> {{material.nombre_material}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                            {% if seccion.seccion_url.all %}
+                                <h5>Enlaces</h5>
+                                <ul class="list-group">
+                                    {% for enlace in seccion.seccion_url.all %}
+                                        <li class="list-group-item"><a target="_blank" href="{{enlace.url}}"><i class="fas fa-link"></i> {{enlace.nombre_enlace}}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -38,7 +47,7 @@
                             <h5>Entregables</h5>
                                 <ul class="list-group">
                                     {% for entregable in seccion.seccion_entregable.all %}
-                                        <li class="list-group-item"><a href="{% url 'entregable' entregable.id %}">{{entregable.nombre_entregable}}</a></li>
+                                        <li class="list-group-item"><a href="{% url 'entregable' entregable.id %}"><i class="fas fa-file-import"></i> {{entregable.nombre_entregable}}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -47,7 +56,7 @@
                                 <h5>Foros</h5>
                                 <ul class="list-group">
                                     {% for foro in seccion.seccion_foro.all %}
-                                        <li class="list-group-item"><a href="{% url 'foro' foro.id %}">{{foro.nombre_foro}}</a></li>
+                                        <li class="list-group-item"><a href="{% url 'foro' foro.id %}"><i class="far fa-comment-alt"></i> {{foro.nombre_foro}}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -109,8 +118,53 @@
 
                     <div>
                         <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enlace">
+                            Agregar un enlace
+                        </button>
+                        <!-- MODAL AGREGAR MATERIAL -->
+                        <form method="POST" action="{% url 'agregarEnlace' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                                
+                            <div class="modal fade" id="enlace" tabindex="-1" aria-labelledby="enlaceLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-center" id="enlaceLabel">
+                                                Agregar un enlace
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input required type="text" name="nombre_enlace" class="form-control" placeholder="Nombre del enlace" autocomplete="off">
+                                            </div>
+                                            <div class="form-group">
+                                                <input required type="text" name="url" class="form-control" placeholder="url o enlace" autocomplete="off">
+                                            </div>
+                                            <select name="seccion_id" >
+                                                {% for seccion in curso.seccion_curso.all %}
+                                                    <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                            value="{{curso.id}}" readonly placeholder="Default input">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+
+                    <div>
+                        <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Agregar un archivo o enlace
+                            Agregar un archivo
                         </button>
                         <!-- MODAL AGREGAR MATERIAL -->
                         <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">

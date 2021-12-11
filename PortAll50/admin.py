@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Chat, Cuenta, Curso, Entrega, Entregable, Foro, Material, Mensaje, RespuestaForo, Seccion
+from .models import Chat, Cuenta, Curso, Entrega, Entregable, Foro, Material, Mensaje, RespuestaForo, Seccion, Url
 
 # Register your models here.
 admin.site.register(Cuenta)
@@ -12,3 +12,4 @@ admin.site.register(Mensaje)
 admin.site.register(Entregable)
 admin.site.register(Entrega)
 admin.site.register(Seccion)
+admin.site.register(Url)

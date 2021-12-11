@@ -17,5 +17,6 @@ urlpatterns = [
     path("agregarForo", views.agregarForo, name="agregarForo"),
     path("foro/<int:id_foro>", views.foro, name="foro"),
     path("respuestaForo", views.respuestaForo, name="respuestaForo"),
-    path("agregarSeccion", views.agregarSeccion, name="agregarSeccion")
+    path("agregarSeccion", views.agregarSeccion, name="agregarSeccion"),
+    path("agregarEnlace", views.agregarEnlace, name="agregarEnlace")
 ]

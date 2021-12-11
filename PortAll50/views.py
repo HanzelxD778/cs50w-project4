@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url
 from datetime import datetime
 
 # Create your views here.
@@ -229,3 +229,17 @@ def agregarSeccion(request):
     seccion = Seccion.objects.create(nombre=nombre_seccion, curso=curso)
 
     return redirect("/portall")
+
+def agregarEnlace(request):
+    nombre_enlace = request.POST.get("nombre_enlace")
+    url = request.POST.get("url")
+    seccion_id = request.POST.get("seccion_id")
+    id_curso = request.POST.get("curso_id")
+
+    seccion = Seccion.objects.get(pk=seccion_id)
+
+    url = Url.objects.create(nombre_enlace=nombre_enlace, url=url, seccion=seccion)
+
+    print(id_curso)
+
+    return redirect(f"curso/{id_curso}")

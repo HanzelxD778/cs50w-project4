@@ -42,7 +42,6 @@ class Seccion(models.Model):
 class Material(models.Model):
     nombre_material = models.CharField(max_length=60)
     archivo = models.FileField(upload_to='materiales/', blank=True) #ver video axel
-    #curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="materiales")
     seccion = models.ForeignKey(Seccion, on_delete=CASCADE, related_name="seccion_material")
 
     class Meta:
@@ -50,6 +49,17 @@ class Material(models.Model):
 
     def __str__(self):
         return f"{self.nombre_material} {self.archivo} {self.seccion}"
+
+class Url(models.Model):
+    nombre_enlace = models.CharField(max_length=60)
+    url = models.URLField()
+    seccion = models.ForeignKey(Seccion, on_delete=CASCADE, related_name="seccion_url")
+
+    class Meta:
+        verbose_name_plural = "Url"
+
+    def __str__(self):
+        return f"{self.nombre_enlace} {self.url} {self.seccion}"
 
 class Enlace(models.Model):
     nombre_enlace = models.CharField(max_length=60)

@@ -23,6 +23,9 @@
     <!-- BOX ICONS -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 
+    <!-- FONT AWESOME -->
+    <script src="https://kit.fontawesome.com/f2f529144b.js" crossorigin="anonymous"></script>
+
     <!-- MY CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
@@ -60,7 +63,7 @@
                         <a class="dropdown-item" href="{% url 'agregarCurso' %}">Agregar un curso</a>
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="" data-toggle="modal" data-target="#exampleModal"> User: {{ user.username }} </a></li>
+                <li class="nav-item"><a class="nav-link" href="" data-toggle="modal" data-target="#profileModal"> User: {{ user.username }} </a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log out</a></li>
             </ul>
         </div>
