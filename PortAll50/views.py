@@ -52,6 +52,55 @@ def portall(request):
 
     return render(request, "portall50/portall.html", context)
 
+def editarPerfil(request):
+    usuario = request.user
+
+    context = {
+        "perfil": usuario
+    }
+
+    return render(request, "portall50/editarPerfil.html", context)
+
+def perfilEditado(request):
+
+    usuario_actual = request.user
+
+    first_name = request.POST.get("first_name")
+    last_name = request.POST.get("last_name")
+    email = request.POST.get("email")
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+    imagen = request.FILES.get("imagen")
+
+    objeto_usuario = User.objects.get(username=usuario_actual)
+    objeto_usuario_cuenta = Cuenta.objects.get(username=objeto_usuario)
+
+    if first_name:
+        objeto_usuario.first_name = first_name
+    
+    if last_name:
+        objeto_usuario.last_name = last_name
+
+    if email:
+         objeto_usuario.email = email
+
+    if username:
+        objeto_usuario.username = username
+
+    if password:
+        objeto_usuario.password = password
+
+    if imagen:
+        objeto_usuario_cuenta.imagen = imagen
+
+    objeto_usuario_cuenta.save()
+    objeto_usuario.save()
+
+    print(objeto_usuario_cuenta)
+    print(imagen)
+
+    return redirect("/portall")
+
 def agregarCurso(request):
 
     context = {
