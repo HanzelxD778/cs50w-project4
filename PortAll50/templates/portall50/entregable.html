@@ -16,7 +16,7 @@
 {% block main %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <h5>Asignación</h5>
                 <a href="{{entregable.archivo.url}}">{{entregable.nombre_entregable}}</a> <br>
                 {{entregable.comentario}} <br>
@@ -52,13 +52,53 @@
     
                 </form>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 {% if user.info_cuenta.tipo == "2" %}
                     <h5>Ver entregas hechas</h5>
                     {% for entre in entregas %}
-                        <a target="_blank" href="{{entre.archivo_entrega.url}}">{{entre.archivo_entrega}}</a>
-                        <p>{{entre.tiempo_entregado}}</p>
-                        <p>Entregado por: {{entre.cuenta.username}}</p>
+                        <div class="card">
+                            <div class="card-body">
+                                <a target="_blank" href="{{entre.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{entre.archivo_entrega}}</a>
+                                <p>{{entre.tiempo_entregado}}</p>
+                                <p>Entregado por: {{entre.cuenta.username}}</p>
+                                {% if entre.nota %}
+                                    <p>Nota: {{entre.nota}}</p>
+                                {% endif %}
+
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega">Calificar entrega</button>
+
+                                    <form method="POST" action="{% url 'calificarEntrega' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+
+                                        <div class="modal fade" id="calificarEntrega" tabindex="-1" aria-labelledby="calificarEntrega" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-center" id="calificarEntrega">
+                                                            Calificar una entrega
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <input required type="number" name="nota" class="form-control" placeholder="Nota de la entrega" autocomplete="off" min=0 max=100>
+                                                        </div>
+                                                        <input name='id_entrega' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                                        value="{{entre.id}}" readonly placeholder="Default input">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-primary">Guardar calificación</button>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <br>
                     {% endfor %}
                 {% endif %}

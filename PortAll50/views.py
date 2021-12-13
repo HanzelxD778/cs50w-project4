@@ -88,7 +88,7 @@ def perfilEditado(request):
         objeto_usuario.username = username
 
     if password:
-        objeto_usuario.password = password
+        objeto_usuario.set_password(password)
 
     if imagen:
         objeto_usuario_cuenta.imagen = imagen
@@ -98,6 +98,9 @@ def perfilEditado(request):
 
     print(objeto_usuario_cuenta)
     print(imagen)
+
+    if password:
+        return redirect("/accounts/logout")
 
     return redirect("/portall")
 
@@ -135,15 +138,9 @@ def registrarCurso(request):
 def curso(request, id_curso):
 
     curso = Curso.objects.get(id=id_curso)
-    #materiales = Material.objects.filter(seccion__curso=curso)
-    #entregables = Entregable.objects.filter(seccion__curso=curso)
-    #foros = Foro.objects.filter(seccion__curso=curso)
 
     context = {
         "curso": curso
-        #"materiales": materiales,
-        #"entregables": entregables,
-        #"foros": foros
     }
 
     return render(request, "PortAll50/curso.html", context)
@@ -292,3 +289,41 @@ def agregarEnlace(request):
     print(id_curso)
 
     return redirect(f"curso/{id_curso}")
+
+def calificarEntrega(request):
+    id_entrega = request.POST.get("id_entrega")
+    nota = request.POST.get("nota")
+
+    entrega = Entrega.objects.get(id=id_entrega)
+
+    entrega.nota = nota
+
+    entrega.save()
+
+    return redirect("/portall")
+
+def agregarEstudiantesCurso(request):
+    username = request.POST.get("username")
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(id=curso_id)
+
+    existe = False
+
+    for estudiante in curso.cuentas.all():
+        if estudiante.username == username:
+            existe = True
+
+    if existe:
+        return redirect("/portall", messages.error(request, "El estudiante ya pertenece al curso"))
+
+    try:
+        usuario = User.objects.get(username=username)
+    except:
+        usuario = False
+
+    if not usuario:
+        return redirect("/portall", messages.error(request, "Ese estudiante no existe"))
+    else:
+        curso.cuentas.add(usuario)
+        return redirect("/portall", messages.error(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))

@@ -61,6 +61,7 @@
                     {% endif %}
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'agregarCurso' %}">Agregar un curso</a>
+                        {% block dropdown %}{% endblock %}
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="" data-toggle="modal" data-target="#profileModal"> User: {{ user.username }} </a></li>

@@ -20,5 +20,7 @@ urlpatterns = [
     path("agregarSeccion", views.agregarSeccion, name="agregarSeccion"),
     path("agregarEnlace", views.agregarEnlace, name="agregarEnlace"),
     path("editarPerfil", views.editarPerfil, name="editarPerfil"),
-    path("perfilEditado", views.perfilEditado, name="perfilEditado")
+    path("perfilEditado", views.perfilEditado, name="perfilEditado"),
+    path("calificarEntrega", views.calificarEntrega, name="calificarEntrega"),
+    path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso")
 ]

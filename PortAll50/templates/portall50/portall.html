@@ -24,7 +24,7 @@
                         <a style="color: black;" href="{% url 'curso' curso.id %}"><h5 class="card-title" style="color: black;">{{curso.nombre_curso}}</5></a>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Docente: {{curso.propietario}}</small>
+                        <small class="text-muted">Docente: {{curso.propietario.first_name}} {{curso.propietario.last_name}}</small>
                         </div>
                     </div>
                 </div>
