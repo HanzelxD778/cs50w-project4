@@ -145,6 +145,15 @@ def curso(request, id_curso):
 
     return render(request, "PortAll50/curso.html", context)
 
+def eliminarCurso(request):
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(id=curso_id)
+
+    curso.delete()
+
+    return redirect("/portall")
+
 def agregarMaterial(request):
     nombre_material = request.POST.get("nombre_material")
     archivo = request.FILES.get("archivo")
@@ -209,6 +218,22 @@ def entregable(request, id_entregable):
     }
 
     return render(request, "PortAll50/entregable.html", context)
+
+#Editar la tarea que sube el estudiante, se debería llamar editarEntrega
+def editarEntregable(request):
+    id_entregable = request.POST.get("id_entregable")
+    archivo_entrega = request.FILES.get("archivo_entrega")
+
+    entrega = Entrega.objects.get(id=id_entregable)
+
+    entrega.archivo_entrega = archivo_entrega
+
+    now = datetime.now()
+    entrega.tiempo_entregado = now
+
+    entrega.save()
+
+    return redirect("/portall")
 
 def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")

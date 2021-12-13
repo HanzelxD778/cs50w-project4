@@ -351,6 +351,42 @@
                             </div>
                         </form>
                     </div>
+
+                    <br>
+
+                    <div>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarCurso">
+                            Eliminar el curso
+                        </button>
+                        <!-- MODAL AGREGAR FORO -->
+                        <form method="POST" action="{% url 'eliminarCurso' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Modal -->
+                            <div class="modal fade" id="eliminarCurso" tabindex="-1" aria-labelledby="eliminarCurso" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="eliminarCurso">
+                                            Eliminar curso
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5 class="text-center">¿Estás seguro de eliminar este curso?</h5>
+                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                        value="{{curso.id}}" readonly placeholder="Default input">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 {% endif %}
             </div>
         </div>

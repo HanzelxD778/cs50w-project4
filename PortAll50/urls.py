@@ -22,5 +22,7 @@ urlpatterns = [
     path("editarPerfil", views.editarPerfil, name="editarPerfil"),
     path("perfilEditado", views.perfilEditado, name="perfilEditado"),
     path("calificarEntrega", views.calificarEntrega, name="calificarEntrega"),
-    path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso")
+    path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso"),
+    path("editarEntregable", views.editarEntregable, name="editarEntregable"),
+    path("eliminarCurso", views.eliminarCurso, name="eliminarCurso")
 ]
