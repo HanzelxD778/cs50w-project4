@@ -73,17 +73,24 @@
             </div>
 
             <div class="col-lg-4">
-                {% if user.info_cuenta.tipo == "2" %}
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                        <div class="card-header">Curso: {{curso.nombre_curso}}</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Estudiantes del curso</h5>
-                            {% for participante in curso.cuentas.all %}
-                                <p class="card-text">{{participante.first_name}} {{participante.last_name}}</p>
-                            {% endfor %}
-                        </div>
+                <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Curso: {{curso.nombre_curso}}</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Estudiantes del curso</h5>
+                        {% for participante in curso.cuentas.all %}    
+                            <p class="card-text"><a href="{% url 'mensaje' participante.id %}"><i class="far fa-user"></i> {{participante.first_name}} {{participante.last_name}}</a></p>
+                       {% endfor %}
+                       <p class="card-text"><a href="{% url 'chatCurso' curso.id %}"><i class="fas fa-users"></i> Chat de curso</a></p>
                     </div>
+                    <div class="card-footer">
+                        <p>Total de puntaje a acumular: {{curso.total_acumular}}</p>
+                        <p>Nota minima para de aprobar el curso: {{curso.cantidad_minima}}</p>
+                        <p>Total actual acumulado: {{curso.actual_acumulado}}</p>
+                        <p>Estado del curso: {{curso.estado_curso}}</p>
+                    </div>
+                </div>
 
+                {% if user.info_cuenta.tipo == "2" %}
                     <div>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#agregarSeccion">
@@ -121,66 +128,115 @@
                     </div>
                     <br>
 
-                    <div>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enlace">
-                            Agregar un enlace
-                        </button>
-                        <!-- MODAL AGREGAR MATERIAL -->
-                        <form method="POST" action="{% url 'agregarEnlace' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                                
-                            <div class="modal fade" id="enlace" tabindex="-1" aria-labelledby="enlaceLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-center" id="enlaceLabel">
-                                                Agregar un enlace
-                                            </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <input required type="text" name="nombre_enlace" class="form-control" placeholder="Nombre del enlace" autocomplete="off">
+                    {% if curso.seccion_curso.all %}
+                        <div>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#enlace">
+                                Agregar un enlace
+                            </button>
+                            <!-- MODAL AGREGAR MATERIAL -->
+                            <form method="POST" action="{% url 'agregarEnlace' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                    
+                                <div class="modal fade" id="enlace" tabindex="-1" aria-labelledby="enlaceLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center" id="enlaceLabel">
+                                                    Agregar un enlace
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <div class="form-group">
-                                                <input required type="text" name="url" class="form-control" placeholder="url o enlace" autocomplete="off">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input required type="text" name="nombre_enlace" class="form-control" placeholder="Nombre del enlace" autocomplete="off">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input required type="text" name="url" class="form-control" placeholder="url o enlace" autocomplete="off">
+                                                </div>
+                                                <select name="seccion_id" >
+                                                    {% for seccion in curso.seccion_curso.all %}
+                                                        <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                                value="{{curso.id}}" readonly placeholder="Default input">
                                             </div>
-                                            <select name="seccion_id" >
-                                                {% for seccion in curso.seccion_curso.all %}
-                                                    <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                                            value="{{curso.id}}" readonly placeholder="Default input">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
+                            </form>
+                        </div>
+                        <br>
 
-                    <div>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Agregar un archivo
-                        </button>
-                        <!-- MODAL AGREGAR MATERIAL -->
-                        <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                                
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                        <div>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Agregar un archivo
+                            </button>
+                            <!-- MODAL AGREGAR MATERIAL -->
+                            <form method="POST" action="{% url 'agregarMaterial' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                    
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center" id="exampleModalLabel">
+                                                    Agregar un archivo
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
+                                                </div>
+                                                <p>El archivito va aquí xd</p>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input required name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                                        <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
+                                                    </div>
+                                                </div>
+                                                <select name="seccion_id" >
+                                                    {% for seccion in curso.seccion_curso.all %}
+                                                        <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                                value="{{curso.id}}" readonly placeholder="Default input">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                        <div>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarEntregable">
+                                Agregar un entregable
+                            </button>
+                            <!-- MODAL AGREGAR ENTREGABLE -->
+                            <form method="POST" action="{% url 'agregarEntregable' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                    
+                                <div class="modal fade" id="agregarEntregable" tabindex="-1" aria-labelledby="agregarEntregableLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title text-center" id="exampleModalLabel">
-                                                Agregar un archivo
+                                            <h5 class="modal-title text-center" id="agregarEntregableLabel">
+                                                Agregar un entregable
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -188,7 +244,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
+                                                <input required type="text" name="nombre_entregable" class="form-control" placeholder="Nombre del entregable" autocomplete="off">
                                             </div>
                                             <p>El archivito va aquí xd</p>
                                             <div class="input-group">
@@ -197,6 +253,15 @@
                                                     <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
                                                 </div>
                                             </div>
+                                            <br>
+                                            <div class="form-group">
+                                                <input required type="text" name="comentario" class="form-control" placeholder="Comentario sobre la asignación" autocomplete="off">
+                                            </div>
+                                            <div class="form-group">
+                                                <input required type="number" name="nota" class="form-control" placeholder="Nota de la asignación" autocomplete="off">
+                                            </div>
+                                            <input required type="date" name="date">
+                                            <input required type="time" name="time">
                                             <select name="seccion_id" >
                                                 {% for seccion in curso.seccion_curso.all %}
                                                     <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
@@ -209,143 +274,93 @@
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-primary">Save changes</button>
                                         </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
-                    <div>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarEntregable">
-                            Agregar un entregable
-                        </button>
-                        <!-- MODAL AGREGAR ENTREGABLE -->
-                        <form method="POST" action="{% url 'agregarEntregable' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                                
-                            <div class="modal fade" id="agregarEntregable" tabindex="-1" aria-labelledby="agregarEntregableLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="agregarEntregableLabel">
-                                            Agregar un entregable
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input required type="text" name="nombre_entregable" class="form-control" placeholder="Nombre del entregable" autocomplete="off">
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                        <div>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarForo">
+                                Añadir un nuevo tema de debate
+                            </button>
+                            <!-- MODAL AGREGAR FORO -->
+                            <form method="POST" action="{% url 'agregarForo' %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Modal -->
+                                <div class="modal fade" id="agregarForo" tabindex="-1" aria-labelledby="agregarForoLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-center" id="agregarForoLabel">
+                                                Agregar un Foro
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        <p>El archivito va aquí xd</p>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input required name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                                                <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input required type="text" name="nombre_foro" class="form-control" placeholder="Nombre del foro" autocomplete="off">
                                             </div>
+                                            <div class="form-group">
+                                                <input required type="text" name="asignacion_foro" class="form-control" placeholder="Asignación del foro" autocomplete="off">
+                                            </div>
+                                            <div class="form-group">
+                                                <input required type="number" name="nota" class="form-control" placeholder="Nota del foro" autocomplete="off">
+                                            </div>
+                                            <input required type="date" name="date">
+                                            <input required type="time" name="time">
+                                            <p>Fecha limite de foro</p>
+                                            <select name="seccion_id" >
+                                                {% for seccion in curso.seccion_curso.all %}
+                                                    <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                            value="{{curso.id}}" readonly placeholder="Default input">
                                         </div>
-                                        <div class="form-group">
-                                            <input required type="text" name="comentario" class="form-control" placeholder="Comentario sobre la asignación" autocomplete="off">
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
                                         </div>
-                                        <input required type="date" name="date">
-                                        <input required type="time" name="time">
-                                        <select name="seccion_id" >
-                                            {% for seccion in curso.seccion_curso.all %}
-                                                <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                                        value="{{curso.id}}" readonly placeholder="Default input">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
-                    <div>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarForo">
-                            Añadir un nuevo tema de debate
-                        </button>
-                        <!-- MODAL AGREGAR FORO -->
-                        <form method="POST" action="{% url 'agregarForo' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <!-- Modal -->
-                            <div class="modal fade" id="agregarForo" tabindex="-1" aria-labelledby="agregarForoLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="agregarForoLabel">
-                                            Agregar un Foro
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input required type="text" name="nombre_foro" class="form-control" placeholder="Nombre del foro" autocomplete="off">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required type="text" name="asignacion_foro" class="form-control" placeholder="Asignación del foro" autocomplete="off">
-                                        </div>
-                                        <input required type="date" name="date">
-                                        <input required type="time" name="time">
-                                        <p>Fecha limite de foro</p>
-                                        <select name="seccion_id" >
-                                            {% for seccion in curso.seccion_curso.all %}
-                                                <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                                        value="{{curso.id}}" readonly placeholder="Default input">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    
+                            </form>
+                        </div>
+                        
+                    {% endif %}
+                        
                     <hr>
 
                     <div>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarEstudiantesCurso">
-                            Agregar estudiante al curso
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#finalizarCurso">
+                            Finalizar curso
                         </button>
                         <!-- MODAL AGREGAR FORO -->
-                        <form method="POST" action="{% url 'agregarEstudiantesCurso' %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'finalizarCurso' %}" enctype="multipart/form-data">
                             {% csrf_token %}
                             <!-- Modal -->
-                            <div class="modal fade" id="agregarEstudiantesCurso" tabindex="-1" aria-labelledby="agregarEstudiantesCurso" aria-hidden="true">
+                            <div class="modal fade" id="finalizarCurso" tabindex="-1" aria-labelledby="finalizarCurso" aria-hidden="true">
                                 <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="agregarEstudiantesCurso">
-                                            Agregar estudiante
+                                        <h5 class="modal-title text-center" id="finalizarCurso">
+                                            Finalizar curso
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="form-group">
-                                            <input required type="text" name="username" class="form-control" placeholder="Username del estudiante" autocomplete="off">
-                                        </div>
+                                        <h5 class="text-center">Confirmar finalizar curso</h5>
                                         <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
                                         value="{{curso.id}}" readonly placeholder="Default input">
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Confirmar</button>
                                     </div>
                                 </div>
                             </div>
@@ -387,6 +402,7 @@
                             </div>
                         </form>
                     </div>
+                    
                 {% endif %}
             </div>
         </div>

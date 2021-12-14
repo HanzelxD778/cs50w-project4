@@ -1,3 +1,4 @@
+from typing import ChainMap
 from django.http import HttpResponse, request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -5,8 +6,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url, Chat, Mensaje
 from datetime import datetime
+from decimal import Decimal
 
 # Create your views here.
 def index(request):
@@ -118,12 +120,15 @@ def registrarCurso(request):
     propietario_curso = request.POST.get("propietario_curso")
     txtImagen = request.FILES.get("txtImagen")
 
+    total_acumular = request.POST.get("total_acumular")
+    cantidad_minima = request.POST.get("cantidad_minima")
+
     propietario = User.objects.filter(pk=propietario_curso)
 
     propietario = propietario[0]
 
     #el objeto creado primero
-    curso = Curso.objects.create(nombre_curso=nombre_curso, propietario=propietario, imagen=txtImagen)
+    curso = Curso.objects.create(nombre_curso=nombre_curso, propietario=propietario, imagen=txtImagen, cantidad_minima=cantidad_minima, total_acumular=total_acumular)
 
     for estudianteID in estudiantes_curso:
         estudiante = User.objects.get(pk=estudianteID)
@@ -132,6 +137,10 @@ def registrarCurso(request):
             curso.cuentas.add(estudiante)
 
     curso.cuentas.add(propietario)
+
+    nombre_chat = f"Chat de {nombre_curso}"
+
+    chatCurso = Chat.objects.create(nombre_chat=nombre_chat, curso=curso)
 
     return redirect("/portall")
 
@@ -178,6 +187,21 @@ def agregarEntregable(request):
     seccion_id = request.POST.get("seccion_id")
     id_curso = request.POST.get("curso_id")
 
+    nota = request.POST.get("nota")
+    curso = Curso.objects.get(id=id_curso)
+
+    total_acumular = curso.total_acumular
+    actual_acumulado = curso.actual_acumulado
+
+    actual_acumulado += Decimal(nota)
+
+    if actual_acumulado > total_acumular:
+        return redirect("/portall", messages.error(request, "No se puede agregar ese entregable porque supera la nota maxima del curso"))
+
+    curso.actual_acumulado = actual_acumulado
+
+    curso.save()
+
     seccion = Seccion.objects.get(pk=seccion_id)
 
     fecha_hora = f"{date}T{time}" 
@@ -185,7 +209,7 @@ def agregarEntregable(request):
     fecha = datetime.fromisoformat(fecha_hora)
     #datetime.fromisoformat('2011-11-04T00:05:23')
 
-    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,seccion=seccion)
+    entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,seccion=seccion, nota=nota)
 
     return redirect(f"curso/{id_curso}")
 
@@ -257,6 +281,21 @@ def agregarForo(request):
     seccion_id = request.POST.get("seccion_id")
     id_curso = request.POST.get("curso_id")
 
+    nota = request.POST.get("nota")
+    curso = Curso.objects.get(id=id_curso)
+
+    total_acumular = curso.total_acumular
+    actual_acumulado = curso.actual_acumulado
+
+    actual_acumulado += Decimal(nota)
+
+    if actual_acumulado > total_acumular:
+        return redirect("/portall", messages.error(request, "No se puede agregar ese foro porque supera la nota maxima del curso"))
+
+    curso.actual_acumulado = actual_acumulado
+
+    curso.save()
+
     seccion = Seccion.objects.get(pk=seccion_id)
     
     fecha_hora = f"{date}T{time}" 
@@ -264,7 +303,7 @@ def agregarForo(request):
     fecha = datetime.fromisoformat(fecha_hora)
     #datetime.fromisoformat('2011-11-04T00:05:23')
 
-    foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, seccion=seccion)
+    foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, seccion=seccion, nota=nota)
 
     return redirect(f"curso/{id_curso}")
 
@@ -352,3 +391,40 @@ def agregarEstudiantesCurso(request):
     else:
         curso.cuentas.add(usuario)
         return redirect("/portall", messages.error(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))
+
+def mensaje(request, id_persona):
+    persona = User.objects.get(id=id_persona)
+
+    context = {
+        "persona": persona
+    }
+
+    return render(request, "PortAll50/persona.html", context)
+
+def chatCurso(request, id_curso):
+    curso = Curso.objects.get(id=id_curso)
+
+    chat = Chat.objects.get(curso=curso)
+
+    context = {
+        "chat": chat
+    }
+
+    return render(request, "PortAll50/chatCurso.html", context)
+
+def finalizarCurso(request):
+    id_curso = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(id=id_curso)
+
+    total_acumular = curso.total_acumular
+    actual_acumulado = curso.actual_acumulado
+
+    if actual_acumulado < total_acumular:
+        return redirect(f"curso/{id_curso}", messages.error(request, "No se puede finalizar el curso porque no se ha alcanzado la nota a acumular total"))
+
+    curso.estado_curso = "2"
+
+    curso.save()
+
+    return redirect(f"curso/{id_curso}")

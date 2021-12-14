@@ -24,5 +24,8 @@ urlpatterns = [
     path("calificarEntrega", views.calificarEntrega, name="calificarEntrega"),
     path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso"),
     path("editarEntregable", views.editarEntregable, name="editarEntregable"),
-    path("eliminarCurso", views.eliminarCurso, name="eliminarCurso")
+    path("eliminarCurso", views.eliminarCurso, name="eliminarCurso"),
+    path("mensaje/<int:id_persona>", views.mensaje, name="mensaje"),
+    path("chatCurso/<int:id_curso>", views.chatCurso, name="chatCurso"),
+    path("finalizarCurso", views.finalizarCurso, name="finalizarCurso")
 ]

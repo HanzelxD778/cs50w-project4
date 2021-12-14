@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block title %}
+    PortAll50
+{% endblock %}
+
+{% block css %}
+    
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                {{chat.nombre_chat}}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

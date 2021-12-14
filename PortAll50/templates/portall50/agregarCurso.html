@@ -42,6 +42,13 @@
                                     <label class="custom-file-label" for="inputGroupFile04">Imagen de curso</label>
                                 </div>
                             </div>
+                            <br>
+                            <div class="form-group">
+                                <input required type="number" name="total_acumular" class="form-control" placeholder="Nota total a acumular en el curso" autocomplete="off" min=1>
+                            </div>
+                            <div class="form-group">
+                                <input required type="number" name="cantidad_minima" class="form-control" placeholder="Nota minima para aprobar curso" autocomplete="off" min=1>
+                            </div>
                             <input name='propietario_curso' class="form-control" style="background: transparent;  border: none;" type="hidden"
                             value="{{user.pk}}" readonly placeholder="Default input">
                             <div class="form-group my-2">

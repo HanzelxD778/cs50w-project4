@@ -18,9 +18,10 @@
         <div class="row">
             <div class="col-lg-3">
                 <h5>Asignación</h5>
-                <a href="{{entregable.archivo.url}}"><i class="far fa-file-alt"></i> {{entregable.nombre_entregable}}</a> <br>
-                {{entregable.comentario}} <br>
-                Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}
+                <a href="{{entregable.archivo.url}}"><i class="far fa-file-alt"></i> {{entregable.nombre_entregable}}</a>
+                <p>Comentario de la asignación: {{entregable.comentario}}</p>
+                <p>Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}</p>
+                <p>Nota del entregable: {{entregable.nota}}</p>
             </div>
             <div class="col-lg-4">
                 <h5>Subir entrega</h5>

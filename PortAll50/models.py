@@ -22,12 +22,17 @@ class Curso(models.Model):
     cuentas = models.ManyToManyField(User, related_name="cursos_inscritos", null=True) #identifica participantes 
     propietario = models.ForeignKey(User, on_delete=CASCADE, related_name="cursos_creados")
     imagen = models.ImageField(upload_to='cursos/', null = True) #investigar upload_to
+    ESTADO_CURSO = [("0", "Preparando"), ("1", "Activo"), ("2", "Finalizo")]
+    estado_curso = models.CharField(choices=ESTADO_CURSO, max_length=1, default="0")
+    cantidad_minima = models.DecimalField(decimal_places=2, max_digits=5, null=True)
+    total_acumular = models.DecimalField(decimal_places=2, max_digits=5, null=True)
+    actual_acumulado = models.DecimalField(decimal_places=2, max_digits=5, default=0)
 
     class Meta:
         verbose_name_plural = "Curso"
 
     def __str__(self):
-        return f"{self.nombre_curso} {self.cuentas} {self.propietario}"
+        return f"{self.nombre_curso} {self.cuentas} {self.propietario} {self.estado_curso} {self.cantidad_minima} {self.total_acumular} {self.actual_acumulado}"
 
 class Seccion(models.Model):
     nombre = models.CharField(max_length=60)
@@ -76,7 +81,7 @@ class Foro(models.Model):
     nombre_foro = models.CharField(max_length=60)
     asignacion_foro = models.CharField(max_length=300)
     fecha_vencimiento = models.DateTimeField() #investigar
-    #curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="foros")
+    nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     seccion = models.ForeignKey(Seccion, on_delete=CASCADE, related_name="seccion_foro")
 
     class Meta:
@@ -100,7 +105,7 @@ class RespuestaForo(models.Model):
 
 class Chat(models.Model):
     nombre_chat = models.CharField(max_length=60)
-    curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="chats")
+    curso = models.OneToOneField(Curso, on_delete=CASCADE, related_name="chat")
 
     class Meta:
         verbose_name_plural = "Chat"
