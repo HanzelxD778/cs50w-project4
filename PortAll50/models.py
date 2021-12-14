@@ -148,7 +148,7 @@ class Entrega(models.Model):
     nota = models.DecimalField(decimal_places=2, max_digits=5, null=True)
     entregable = models.ForeignKey(Entregable, on_delete=CASCADE, related_name="entregas")
     cuenta = models.ForeignKey(User, on_delete=CASCADE, related_name="entregas")
-    ESTADO_ENTREGA = [("0", "No enviada"), ("1", "Enviada")]
+    ESTADO_ENTREGA = [("0", "Sin calificar"), ("1", "Calificado")]
     estado_entrega = models.CharField(choices=ESTADO_ENTREGA, max_length=1, default="0")
 
 

@@ -263,7 +263,7 @@ def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")
     id_entregable = request.POST.get("id_entregable")
     id_cuenta = request.POST.get("id_cuenta")
-    estado_entrega = "1"
+    estado_entrega = "0"
 
     entregable = Entregable.objects.get(id=id_entregable)
 
@@ -359,8 +359,13 @@ def calificarEntrega(request):
     nota = request.POST.get("nota")
 
     entrega = Entrega.objects.get(id=id_entrega)
+    
+    if Decimal(nota) > entrega.entregable.nota:
+        return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del entregable"))
 
     entrega.nota = nota
+    
+    entrega.estado_entrega = "1"
 
     entrega.save()
 

@@ -44,7 +44,7 @@
                         {% if envio.estado_entrega == "1" %}
                             <button type="button" class="btn btn-primary mt-2">Entrega realizada</button>
                         {% else %}
-                            <button type="submit" class="btn btn-success">Enviar entrega</button>
+                            <button type="submit" class="btn btn-success mt-2">Enviar entrega</button>
                         {% endif %}
                         {% if not envio %}
                             <button type="submit" class="btn btn-success">Enviar entrega</button>                
@@ -67,7 +67,11 @@
                                 {% endif %}
 
                                 <div>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega">Calificar entrega</button>
+                                    {% if entre.estado_entrega == "0" %}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega">Calificar entrega</button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#calificarEntrega">Calificado</button>
+                                    {% endif %}
 
                                     <form method="POST" action="{% url 'calificarEntrega' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
@@ -85,7 +89,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group">
-                                                            <input required type="number" name="nota" class="form-control" placeholder="Nota de la entrega" autocomplete="off" min=0 max=100>
+                                                            <input required type="decimal" name="nota" class="form-control" placeholder="Nota de la entrega" autocomplete="off" min=0 max=100>
                                                         </div>
                                                         <input name='id_entrega' class="form-control" style="background: transparent;  border: none;" type="hidden"
                                                         value="{{entre.id}}" readonly placeholder="Default input">
@@ -104,42 +108,45 @@
                     {% endfor %}
                 {% endif %}
                 {% if user.info_cuenta.tipo == "1" %}
-                    <a target="_blank" href="{{envio.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{envio.archivo_entrega}}</a>
-                    <p>{{envio.tiempo_entregado}}</p>
+                    {% if envio.tiempo_entregado %}
+                        <a target="_blank" href="{{envio.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{envio.archivo_entrega}}</a>
+                        <p>{{envio.tiempo_entregado}}</p>
 
-                    <div>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editarEntregable">Editar entrega</button>
+                        <div>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editarEntregable">Editar entrega</button>
 
-                        <form method="POST" action="{% url 'editarEntregable' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
+                            <form method="POST" action="{% url 'editarEntregable' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
 
-                            <div class="modal fade" id="editarEntregable" tabindex="-1" aria-labelledby="editarEntregable" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-center" id="editarEntregable">
-                                                Editar entrega
-                                            </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="custom-file">
-                                                <input required name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                                                <label class="custom-file-label" for="inputGroupFile04">Nuevo archivo entrega aqui</label>
+                                <div class="modal fade" id="editarEntregable" tabindex="-1" aria-labelledby="editarEntregable" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-center" id="editarEntregable">
+                                                    Editar entrega
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                            <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                                            value="{{envio.id}}" readonly placeholder="Default input">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-primary">Subir entrega</button>
-                                        </div>
+                                            <div class="modal-body">
+                                                <div class="custom-file">
+                                                    <input required name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                                    <label class="custom-file-label" for="inputGroupFile04">Nuevo archivo entrega aqui</label>
+                                                </div>
+                                                <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                                value="{{envio.id}}" readonly placeholder="Default input">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-primary">Subir entrega</button>
+                                            </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                    
 
                     {% if envio.nota %}
                         <p>Nota: {{envio.nota}}</p>
