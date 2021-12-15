@@ -28,5 +28,6 @@ urlpatterns = [
     path("mensaje/<int:id_persona>", views.mensaje, name="mensaje"),
     path("chatCurso/<int:id_curso>", views.chatCurso, name="chatCurso"),
     path("finalizarCurso", views.finalizarCurso, name="finalizarCurso"),
-    path("calificarForo/<int:id_foro>/<int:id_estudiante>", views.calificarForo, name="calificarForo")
+    path("calificarForo/<int:id_foro>/<int:id_estudiante>", views.calificarForo, name="calificarForo"),
+    path("notasCurso/<int:id_curso>", views.notasCurso, name="notasCurso")
 ]

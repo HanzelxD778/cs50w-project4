@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
@@ -33,6 +34,17 @@ class Curso(models.Model):
 
     def __str__(self):
         return f"{self.nombre_curso} {self.cuentas} {self.propietario} {self.estado_curso} {self.cantidad_minima} {self.total_acumular} {self.actual_acumulado}"
+
+class Nota(models.Model):
+    nota = models.DecimalField(decimal_places=2, max_digits=5, default=0)
+    curso = models.OneToOneField(Curso, on_delete=CASCADE, related_name="nota_curso")
+    estudiante = models.ForeignKey(User, on_delete=CASCADE, related_name="nota_estudiante")
+
+    class Meta:
+        verbose_name_plural = "Nota"
+
+    def __str__(self):
+        return f"{self.nota} {self.curso} {self.estudiante}"
 
 class Seccion(models.Model):
     nombre = models.CharField(max_length=60)
@@ -156,7 +168,7 @@ class Entrega(models.Model):
         verbose_name_plural = "Entrega"
 
     def __str__(self):
-        return f"{self.archivo_entrega} {self.tiempo_entregado} {self.nota} {self.entregable} {self.cuenta} {self.estado_entrega}"
+        return f"{self.id} {self.archivo_entrega} {self.tiempo_entregado} {self.nota} {self.entregable} {self.cuenta} {self.estado_entrega}"
 
 ##########################################################################################
 #                                  HACER CUESTIONARIO

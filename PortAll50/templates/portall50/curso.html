@@ -81,6 +81,7 @@
                             <p class="card-text"><a href="{% url 'mensaje' participante.id %}"><i class="far fa-user"></i> {{participante.first_name}} {{participante.last_name}}</a></p>
                        {% endfor %}
                        <p class="card-text"><a href="{% url 'chatCurso' curso.id %}"><i class="fas fa-users"></i> Chat de curso</a></p>
+                       <p class="card-text"><a href="{% url 'notasCurso' curso.id %}"><i class="far fa-chart-bar"></i> Notas</a></p>
                     </div>
                     <div class="card-footer">
                         <p>Total de puntaje a acumular: {{curso.total_acumular}}</p>

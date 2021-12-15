@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages #import messages
 from django.contrib.auth.decorators import login_required
-from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url, Chat, Mensaje
+from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url, Chat, Mensaje, Nota
 from datetime import datetime
 from decimal import Decimal
 
@@ -353,10 +353,6 @@ def calificarForo(request, id_foro, id_estudiante):
         estudiante = User.objects.get(id=id_estudiante)
         cuenta = estudiante.info_cuenta
 
-        #print(nota_estudiante)
-        #print(foro)
-        #print(estudiante)
-
         if Decimal(nota_estudiante) < 0:
             return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
 
@@ -374,6 +370,19 @@ def calificarForo(request, id_foro, id_estudiante):
 
         respues.nota = nota_estudiante
         respues.save()
+
+        #ESTO ES PARA LA TABLA NOTA
+        curso = respues.foro.seccion.curso
+        estudiante = respues.cuenta
+
+        try:
+            tnota = Nota.objects.get(curso=curso)
+        except:
+            tnota = Nota.objects.create(nota=nota_estudiante, curso=curso, estudiante=estudiante.username)
+            return redirect("/portall")
+
+        tnota.nota += Decimal(nota_estudiante)
+        tnota.save()
 
         return redirect("/portall", messages.success(request, "Estudiante calificado"))
 
@@ -416,6 +425,19 @@ def calificarEntrega(request):
 
     entrega.save()
 
+    #ESTO ES PARA LA TABLA NOTA
+    curso = entrega.entregable.seccion.curso
+    estudiante = entrega.cuenta
+
+    try:
+        tnota = Nota.objects.get(curso=curso)
+    except:
+        tnota = Nota.objects.create(nota=nota, curso=curso, estudiante=estudiante)
+        return redirect("/portall")
+
+    tnota.nota += Decimal(nota)
+    tnota.save()
+
     return redirect("/portall")
 
 def agregarEstudiantesCurso(request):
@@ -448,7 +470,7 @@ def mensaje(request, id_persona):
     persona = User.objects.get(id=id_persona)
 
     context = {
-        "persona": persona
+        "persona": persona,
     }
 
     return render(request, "PortAll50/persona.html", context)
@@ -479,4 +501,17 @@ def finalizarCurso(request):
 
     curso.save()
 
+    
+
     return redirect(f"curso/{id_curso}")
+
+def notasCurso(request, id_curso):
+    curso = Curso.objects.get(id=id_curso)
+
+    entregas = Entrega.objects.filter(entregable__seccion__curso = curso)
+
+    context = {
+        "entregas": entregas
+    }
+
+    return render(request, "PortAll50/notasCurso.html", context)
