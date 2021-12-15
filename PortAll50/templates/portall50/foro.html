@@ -19,13 +19,26 @@
             <div class="col-lg-4">
                 <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
                     <div class="card-title card-header">{{foro.nombre_foro}}</div>
-                    <div class="card-body">
-                        <p class="card-text"><p>{{foro.asignacion_foro}}</p>
-                        <p>Vence el: {{foro.fecha_vencimiento}}</p>
-                        <p>Nota del foro: {{foro.nota}}</p>
+                        <div class="card-body">
+                            <p class="card-text"><p>{{foro.asignacion_foro}}</p>
+                            <p>Vence el: {{foro.fecha_vencimiento}}</p>
+                            <p>Nota del foro: {{foro.nota}}</p>
+                        </div>
                     </div>
-                  </div>
-                </div>
+
+                    {% if user.info_cuenta.tipo == "2" %}
+                            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                                <div class="card-title card-header">Calificar un estudiante</div>
+                                    <div class="card-body">
+                                        {% for estudiante in curso.cuentas.all %}
+                                            {% if estudiante.username != user.username %}
+                                                <p>{{estudiante.username}}</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                            </div>
+                    {% endif %}
+            </div>
             <div class="col-lg-4">
                 {% for respuesta in respuestasForo %}
                     <div class="card w-95">
@@ -34,7 +47,7 @@
                         </div>
                         <div class="card-body">
                             <div class="circulo">
-                                <img class="imagen" src="{{user.info_cuenta.imagen.url}}" class="card-img-top">
+                                <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
                             </div>
                             <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
                             <p class="card-text">{{respuesta.respuesa_foro}}</p>

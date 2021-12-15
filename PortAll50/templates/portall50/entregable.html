@@ -68,15 +68,15 @@
 
                                 <div>
                                     {% if entre.estado_entrega == "0" %}
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega">Calificar entrega</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega{{entre.id}}">Calificar entrega</button>
                                     {% else %}
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#calificarEntrega">Calificado</button>
+                                        <button type="button" class="btn btn-success">Calificado</button>
                                     {% endif %}
 
                                     <form method="POST" action="{% url 'calificarEntrega' %}" enctype="multipart/form-data">
                                     {% csrf_token %}
 
-                                        <div class="modal fade" id="calificarEntrega" tabindex="-1" aria-labelledby="calificarEntrega" aria-hidden="true">
+                                        <div class="modal fade" id="calificarEntrega{{entre.id}}" tabindex="-1" aria-labelledby="calificarEntrega" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">

@@ -308,12 +308,17 @@ def agregarForo(request):
     return redirect(f"curso/{id_curso}")
 
 def foro(request, id_foro):
+    user = request.user
     foro = Foro.objects.get(id=id_foro)
     respuestasForo = RespuestaForo.objects.filter(foro=foro)
+    seccion = foro.seccion
+    curso = seccion.curso
 
     context = {
+        "user": user,
         "foro": foro,
-        "respuestasForo": respuestasForo
+        "respuestasForo": respuestasForo,
+        "curso": curso
     }
 
     return render(request, "PortAll50/foro.html", context)
