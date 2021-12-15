@@ -336,16 +336,46 @@ def respuestaForo(request):
     return redirect("/portall")
 
 def calificarForo(request, id_foro, id_estudiante):
+    if request.method == "GET":
+        foro = Foro.objects.get(id=id_foro)
+        estudiante = User.objects.get(id=id_estudiante)
 
-    foro = Foro.objects.get(id=id_foro)
-    estudiante = User.objects.get(id=id_estudiante)
+        context = {
+            "foro": foro,
+            "estudiante": estudiante
+        }
 
-    context = {
-        "foro": foro,
-        "estudiante": estudiante
-    }
+        return render(request, "PortAll50/calificarForo.html", context)
+    else:
+        nota_estudiante = request.POST.get("nota_estudiante")
 
-    return render(request, "PortAll50/calificarForo.html", context)
+        foro = Foro.objects.get(id=id_foro)
+        estudiante = User.objects.get(id=id_estudiante)
+        cuenta = estudiante.info_cuenta
+
+        #print(nota_estudiante)
+        #print(foro)
+        #print(estudiante)
+
+        if Decimal(nota_estudiante) < 0:
+            return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
+
+        if Decimal(nota_estudiante) > foro.nota:
+            return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del foro"))
+
+        for respuesta in foro.respuestas.all():
+            if respuesta.cuenta == cuenta:
+                id_respuesta = respuesta.id
+
+        try:
+            respues = RespuestaForo.objects.get(id=id_respuesta)
+        except:
+            return redirect("/portall", messages.error(request, "Estudiante no ha respondido al foro calificacion por defecto es cero"))
+
+        respues.nota = nota_estudiante
+        respues.save()
+
+        return redirect("/portall", messages.success(request, "Estudiante calificado"))
 
 def agregarSeccion(request):
     nombre_seccion = request.POST.get("nombre_seccion")
