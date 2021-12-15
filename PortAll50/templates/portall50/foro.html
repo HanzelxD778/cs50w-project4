@@ -32,7 +32,7 @@
                                     <div class="card-body">
                                         {% for estudiante in curso.cuentas.all %}
                                             {% if estudiante.username != user.username %}
-                                                <p>{{estudiante.username}}</p>
+                                                <p><a href="{% url 'calificarForo' foro.id estudiante.id %}"><i class="far fa-user"></i> {{estudiante.username}}</a></p>
                                             {% endif %}
                                         {% endfor %}
                                     </div>

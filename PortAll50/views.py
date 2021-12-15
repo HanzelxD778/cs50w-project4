@@ -335,6 +335,18 @@ def respuestaForo(request):
 
     return redirect("/portall")
 
+def calificarForo(request, id_foro, id_estudiante):
+
+    foro = Foro.objects.get(id=id_foro)
+    estudiante = User.objects.get(id=id_estudiante)
+
+    context = {
+        "foro": foro,
+        "estudiante": estudiante
+    }
+
+    return render(request, "PortAll50/calificarForo.html", context)
+
 def agregarSeccion(request):
     nombre_seccion = request.POST.get("nombre_seccion")
     curso_id = request.POST.get("curso_id")
