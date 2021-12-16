@@ -1,0 +1,153 @@
+Administración de bases de datos (Introducción)
+¿Qué es un DBA?
+	El administrador de bases de datos (DBA) es el profesional que administra las tecnologías 
+	de la información y la comunicación, siendo responsable de los aspectos técnicos, tecnológicos,
+ 	científicos, inteligencia de negocios y legales de bases de datos.
+
+¿Qué es un base de datos?
+	Se define una base de datos como una serie de datos organizados y relacionados entre sí,
+    	los cuales son recolectados y explotados por los sistemas de información de una empresa 
+	o negocio en particular.
+
+¿Porque son importantes las bases de datos?
+	Las bases de datos proporcionan la infraestructura requerida para los sistemas de apoyo a 
+	la toma de decisiones y para los sistemas de información estratégicos, ya que estos sistemas 
+	explotan la información contenida en las bases de datos de la organización para apoyar el 
+	proceso de toma de decisiones o para lograr ventajas competitivas. 
+
+¿Por qué una empresa necesita un DBA?
+	Las tareas deben ser especializadas y qué mejor que una persona encargada que haya estudiado 
+	mucho, haya tenido bastante experiencia y sobre todo, se haya dedicado a profundizar en todos 
+	los temas con los cuales trabajará.
+
+
+¿Qué estudia un DBA o qué debe profundizar?
+	Analysis Services, Reporting Services, Data Quality Services, Integration Services(inteligencia
+	de negocios), etc.
+
+¿Qué es un SGBDR?
+	SQL Server es un sistema de gestión de base de datos relacional (SGBDR), lo que le confiere 
+	una gran capacidad de gestionar los datos, conservando su integridad y su coherencia. 
+
+Modo de funcionamiento cliente/servidor 
+	La aplicación cliente se encarga de la puesta en marcha de la interfaz de usuario.
+	El servridor se encarga de la gestión de los datos y del reparto de los recursos del servidor 
+	entre las diferentes solicitudes (consultas) de los clientes. Las reglas de gestión de la 
+	empresa se reparten entre el cliente y el servidor.
+
+Tres casos funcionamiento cliente servidor
+	Las reglas se implementan completamente en el cliente, llamado cliente pesado. Esta solución 
+	permite liberar recursos a nivel del servidor, aunque aparecen problemas de actualización de 
+	los clientes y de desarrollo de otras aplicaciones. 
+
+	Las reglas se definen completamente en el servidor. El cliente es, por lo tanto, un cliente 
+	ligero. Esta solución permite obtener clientes que consumen pocos recursos materiales y una 
+	centralización de las reglas, lo que flexibiliza las actualizaciones. Sin embargo, el servidor 
+	consume muchos recursos y el nivel de interacción con el usuario corre el riesgo de degradarse, 
+	ya que el conjunto de restricciones se verifica en el momento en que el usuario envía su 
+	solicitud (consulta) al servidor.
+
+	Las reglas de la empresa se definen en una tercera máquina, llamada Middle Ware, con el objetivo 
+	de disminuir los recursos utilizados por el cliente y el servidor, conservando en todo momento 
+	la centralización de las reglas.
+
+Tareas del administrador
+	El administrador de la base de datos tiene como objetivo principal mejorar el funcionamiento de 
+	la base de datos. Aunque SQL Server ofrece numerosas herramientas y algoritmos de autooptimización, 
+	todavía queda mucho trabajo para el administrador. 
+
+Principales tareas del administrador
+	Gestionar los servicios SQL Server. 
+	Gestionar las instancias de SQL Server. 
+	Establecer los procesos de copia de seguridad y restauración.
+	Configurar la disponibilidad de los datos de acuerdo con la política de la empresa. 
+	Gestionar las configuraciones de red. 
+	Importar y exportar datos. 
+
+--------------------------------------------------------------------------------------------------------------
+Administración de bases de datos
+Bases de datos de sistema
+	Master {
+		BD principal donde está almacenado el conjunto de datos estratégicos para el buen 
+		funcionamiento del servidor (cuentas de conexión, opciones de configuración, existencia 
+		de bases de datos de usuario y las referencias a los archivos que componen estas bases...)
+	}
+	Model {
+		Es exactamente lo que su nombre implica: un modelo para todas las bases de datos que se 
+		crean en una instancia de SQL Server. En otras palabras, se usa como plantilla cada vez 
+		que creas una base de datos.
+	}	
+	Tempdb {
+		Es un espacio temporal de almacenamiento compartido. Permite gestionar las tablas temporales 
+		locales o globales, las tablas de trabajo intermediarias para hacer ordenaciones, por ejemplo, 
+		pero también los conjuntos de resultado de los cursores. La base Tempdb se crea nuevamente, 
+		con su tamaño inicial, en el momento del inicio de la instancia. Por lo tanto, no se puede 
+		conservar de manera permanente ninguna información en la base de datos Tempdb. Los objetos 
+		temporales se eliminan cuando su propietario se desconecta. 
+	
+		Se pueden especificar los parámetros físicos de la base tempdb al instalar una instancia
+		SQL Server. Por defecto esta base de datos se compone de ocho archivos de 8 MB. 
+
+	}
+	Msdb {
+		Contiene la información utilizada por el servicio SQL Server Agent para lanzar una alerta, 
+		avisar a un operador o ejecutar una tarea planificada. Msdb contiene también el histórico 
+		de ejecución de las tareas. 
+	}
+	Resource{
+		Es una base de datos de solo lectura que contiene todos los objetos del sistema que se incluyen
+		con SQL Server. Los objetos del sistema de SQL Server, como sys.objects, se conservan físicamente 
+		en la base de datos de recursos, pero aparecen lógicamente en el esquema sys de cada base de datos. 
+		La base de datos de recursos no contiene datos de usuario ni metadatos de usuario.
+
+		La base de datos de recursos hace que la actualización a una nueva versión de SQL Server sea 
+		un procedimiento más fácil y rápido. En versiones anteriores de SQL Server, la actualización 
+		requería eliminar y crear objetos del sistema. Debido a que el archivo de la base de datos 
+		de recursos contiene todos los objetos del sistema, ahora se realiza una actualización 
+		simplemente copiando el archivo de la base de datos de recursos en el servidor local.
+	}
+	
+--------------------------------------------------------------------------------------------------------------
+Presentación Backup
+Relaciones entre la base de datos y la organización física
+	Como mínimo, cada base de datos de SQL Server tiene dos archivos de sistema operativo: un archivo de 
+	datos y un archivo de registro. Los archivos de datos contienen datos y objetos como tablas, índices, 
+	procedimientos almacenados y vistas. Los archivos de registro contienen la información necesaria para 
+	recuperar todas las transacciones en la base de datos. Los archivos de datos se pueden agrupar en grupos 
+	de archivos con fines de asignación y administración.
+
+Una base de datos esta compuesta
+	Como mínimo, de un archivo de datos principal (extensión mdf) y de un archivo diario (extensión ldf). 
+	Se pueden definir archivos de datos secundarios (ndf) en el momento de la creación de la base o bien 
+	posteriormente. 
+
+Archivo de datos primario
+	Contiene información de inicio para la base de datos y apunta a los otros archivos de la base de datos. 
+	Cada base de datos tiene un archivo de datos principal. La extensión de nombre de archivo recomendada 
+	para los archivos de datos primarios es .mdf.
+
+Archivo de datos secundario
+	Archivos de datos opcionales definidos por el usuario. Los datos se pueden distribuir en varios discos 
+	colocando cada archivo en una unidad de disco diferente. La extensión de nombre de archivo recomendada 
+	para archivos de datos secundarios es .ndf.
+
+Registro de transacciones/Archivo de Log/Archivo de diario
+	El registro contiene información utilizada para recuperar la base de datos. Debe haber al menos un 
+	archivo de registro para cada base de datos. La extensión de nombre de archivo recomendada para los 
+	registros de transacciones es .ldf.
+
+¿Qué es una transacción?
+	es un conjunto indivisible de sentencias Transact SQL. Una transacción se ejecuta de manera completa 
+	y no se admite la ejecución de una sentencia individual de manera aislada. 
+
+Copias de seguridad
+	Completa
+	Diferencial
+	De Log
+
+Modos de recuperación
+	FULL		Recupera Todo
+	BULK-logged 	Escribe todas las transacciones del log pero no guarda mucho detalle	
+	SIMPLE		Usa poco espacio así que elimina transacciones antiguas y no recupera log
+
+--------------------------------------------------------------------------------------------------------------

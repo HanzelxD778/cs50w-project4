@@ -19,28 +19,28 @@
             <div class="col-lg-8">
                 {% if user.info_cuenta.tipo == "2" %}
                     {% for nota in notas %}
-                    {% for estudiante in estudiantes %}
-                        {% if estudiante != nota.estudiante %}
-                            {% if curso.propietario != estudiante %}
-                                <p>Estudiante: {{estudiante.first_name}} {{estudiante.last_name}}</p>
-                                <p>Nota: 0</p>
-                                {% if curso.estado_curso == "2" %}
-                                    <span class="badge badge-danger">Reprobado</span>
+                        {% for estudiante in estudiantes %}
+                            {% if estudiante != nota.estudiante %}
+                                {% if curso.propietario != estudiante %}
+                                    <p>Estudiante: {{estudiante.first_name}} {{estudiante.last_name}}</p>
+                                    <p>Nota: 0</p>
+                                    {% if curso.estado_curso == "2" %}
+                                        <span class="badge badge-danger">Reprobado</span>
+                                    {% endif %}
+                                    <hr>
                                 {% endif %}
-                                <hr>
+                            {% endif %}
+                        {% endfor %}
+                        <p>Estudiante: {{nota.estudiante.first_name}} {{nota.estudiante.last_name}}</p>
+                        <p>Nota: {{nota.nota}}</p>
+                        {% if curso.estado_curso == "2" %}
+                            {% if nota.nota >= curso.cantidad_minima %}
+                            <span class="badge badge-success">Aprobado</span>
+                            {% else %}
+                                <span class="badge badge-danger">Reprobado</span>
                             {% endif %}
                         {% endif %}
-                    {% endfor %}
-                    <p>Estudiante: {{nota.estudiante.first_name}} {{nota.estudiante.last_name}}</p>
-                    <p>Nota: {{nota.nota}}</p>
-                    {% if curso.estado_curso == "2" %}
-                        {% if nota.nota >= curso.cantidad_minima %}
-                        <span class="badge badge-success">Aprobado</span>
-                        {% else %}
-                            <span class="badge badge-danger">Reprobado</span>
-                        {% endif %}
-                    {% endif %}
-                    <hr>
+                        <hr>
                     {% endfor %}
                 {% endif %}
 

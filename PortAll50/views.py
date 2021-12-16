@@ -385,12 +385,12 @@ def calificarForo(request, id_foro, id_estudiante):
 
         #ESTO ES PARA LA TABLA NOTA
         curso = respues.foro.seccion.curso
-        estudiante = respues.cuenta
+        #estudiante = respues.cuenta
 
         try:
-            tnota = Nota.objects.get(curso=curso)
+            tnota = Nota.objects.get(curso=curso, estudiante=estudiante)
         except:
-            tnota = Nota.objects.create(nota=nota_estudiante, curso=curso, estudiante=estudiante.username)
+            tnota = Nota.objects.create(nota=nota_estudiante, curso=curso, estudiante=estudiante)
             return redirect("/portall")
 
         tnota.nota += Decimal(nota_estudiante)
@@ -442,7 +442,7 @@ def calificarEntrega(request):
     estudiante = entrega.cuenta
 
     try:
-        tnota = Nota.objects.get(curso=curso)
+        tnota = Nota.objects.get(curso=curso, estudiante=estudiante)
     except:
         tnota = Nota.objects.create(nota=nota, curso=curso, estudiante=estudiante)
         return redirect("/portall")

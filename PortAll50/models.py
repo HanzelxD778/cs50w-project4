@@ -37,7 +37,7 @@ class Curso(models.Model):
 
 class Nota(models.Model):
     nota = models.DecimalField(decimal_places=2, max_digits=5, default=0)
-    curso = models.OneToOneField(Curso, on_delete=CASCADE, related_name="nota_curso")
+    curso = models.ForeignKey(Curso, on_delete=CASCADE, related_name="nota_curso")
     estudiante = models.ForeignKey(User, on_delete=CASCADE, related_name="nota_estudiante")
 
     class Meta:

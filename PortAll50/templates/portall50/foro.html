@@ -51,6 +51,11 @@
                             </div>
                             <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
                             <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                            {% if respuesta.nota %}
+                                <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
+                            {% else %}
+                                <span class="badge badge-secondary">Sin calificar</span>
+                            {% endif %}
                         </div>
                     </div>   
                     <br>
