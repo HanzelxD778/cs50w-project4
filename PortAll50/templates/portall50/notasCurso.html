@@ -17,15 +17,58 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                {% for entrega in entregas %}
-                    <p>{{entrega.archivo_entrega}}</p>
-                    <p>{{entrega.tiempo_entregado}}</p>
-                    <p>{{entrega.nota}}</p>
-                    <p>{{entrega.entregable}}</p>
-                    <p>{{entrega.cuenta}}</p>
-                    <p>{{entrega.estado_entrega}}</p>
+                {% if user.info_cuenta.tipo == "2" %}
+                    {% for nota in notas %}
+                    {% for estudiante in estudiantes %}
+                        {% if estudiante != nota.estudiante %}
+                            {% if curso.propietario != estudiante %}
+                                <p>Estudiante: {{estudiante.first_name}} {{estudiante.last_name}}</p>
+                                <p>Nota: 0</p>
+                                {% if curso.estado_curso == "2" %}
+                                    <span class="badge badge-danger">Reprobado</span>
+                                {% endif %}
+                                <hr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <p>Estudiante: {{nota.estudiante.first_name}} {{nota.estudiante.last_name}}</p>
+                    <p>Nota: {{nota.nota}}</p>
+                    {% if curso.estado_curso == "2" %}
+                        {% if nota.nota >= curso.cantidad_minima %}
+                        <span class="badge badge-success">Aprobado</span>
+                        {% else %}
+                            <span class="badge badge-danger">Reprobado</span>
+                        {% endif %}
+                    {% endif %}
                     <hr>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if user.info_cuenta.tipo == "1" %}
+                    {% if not mi_nota %}
+                        <p>Estudiante: {{yo.first_name}} {{yo.last_name}}</p>
+                        <p>Nota: 0</p>
+                        {% if curso.estado_curso == "2" %}
+                            <span class="badge badge-danger">Reprobado</span>
+                        {% endif %}
+                    {% endif %}
+                    {% if mi_nota %}
+                        {% for nota in notas %}
+                            {% if nota.estudiante == yo %}
+                                <p>Estudiante: {{nota.estudiante.first_name}} {{nota.estudiante.last_name}}</p>
+                                <p>Nota: {{nota.nota}}</p>
+                                {% if curso.estado_curso == "2" %}
+                                    {% if nota.nota >= curso.cantidad_minima %}
+                                        <span class="badge badge-success">Aprobado</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Reprobado</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+                
             </div>
         </div>
     </div>

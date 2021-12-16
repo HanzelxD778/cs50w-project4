@@ -30,6 +30,9 @@
                             <input required type="decimal" name="nota_estudiante" class="form-control" placeholder="Calificacion del estudiante" autocomplete="off" min="0">
                             <button type="submit" class="btn btn-success mt-2">Guardar nota</button>
                         </form>
+                        {% if notaForo.nota %}
+                            <p>Estudiante ya calificado con calificación de: {{notaForo.nota}}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

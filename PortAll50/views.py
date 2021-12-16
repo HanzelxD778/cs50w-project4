@@ -340,9 +340,21 @@ def calificarForo(request, id_foro, id_estudiante):
         foro = Foro.objects.get(id=id_foro)
         estudiante = User.objects.get(id=id_estudiante)
 
+        cuenta = Cuenta.objects.get(username=estudiante)
+        #cuenta = estudiante.info_cuenta
+        print(foro.id)
+        try:
+            try:
+                notaForo = RespuestaForo.objects.get(cuenta=cuenta, foro=foro)
+            except:
+                notaForo = RespuestaForo.objects.get(cuenta=cuenta)
+        except:
+            notaForo = None
+
         context = {
             "foro": foro,
-            "estudiante": estudiante
+            "estudiante": estudiante,
+            "notaForo": notaForo
         }
 
         return render(request, "PortAll50/calificarForo.html", context)
@@ -508,10 +520,23 @@ def finalizarCurso(request):
 def notasCurso(request, id_curso):
     curso = Curso.objects.get(id=id_curso)
 
-    entregas = Entrega.objects.filter(entregable__seccion__curso = curso)
+    #entregas = Entrega.objects.filter(entregable__seccion__curso = curso)
+    notas = Nota.objects.filter(curso=curso)
+    estudiantes = curso.cuentas.all()
+
+    yo = request.user
+
+    try:
+        mi_nota = Nota.objects.get(estudiante=yo, curso=curso)
+    except:
+        mi_nota = None
 
     context = {
-        "entregas": entregas
+        "notas": notas,
+        "estudiantes": estudiantes,
+        "curso": curso,
+        "mi_nota": mi_nota,
+        "yo": yo
     }
 
     return render(request, "PortAll50/notasCurso.html", context)
