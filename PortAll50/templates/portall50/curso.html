@@ -335,12 +335,48 @@
                     <hr>
 
                     <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#agregarEstudiantesCurso">
+                            Agregar estudiante al curso
+                        </button>
+                        <!-- Button trigger modal -->
+                        <!-- MODAL AGREGAR FORO -->
+                        <form method="POST" action="{% url 'agregarEstudiantesCurso' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Modal -->
+                            <div class="modal fade" id="agregarEstudiantesCurso" tabindex="-1" aria-labelledby="agregarEstudiantesCurso" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="agregarEstudiantesCurso">
+                                            Agregar estudiante al curso
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input required type="text" name="username" class="form-control" placeholder="Nombre unico del estudiante a agregar" autocomplete="off">
+                                        </div>
+                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                        value="{{curso.id}}" readonly placeholder="Default input">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div>
                         {% if curso.estado_curso == "2" %}
-                        <button type="button" class="btn btn-success">
+                        <button type="button" class="btn btn-success mt-4">
                             Curso finalizado
                         </button>  
                         {% else %}
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#finalizarCurso">
+                            <button type="button" class="btn btn-success mt-4" data-toggle="modal" data-target="#finalizarCurso">
                                 Finalizar curso
                             </button>
                         {% endif %}

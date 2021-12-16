@@ -465,7 +465,7 @@ def agregarEstudiantesCurso(request):
             existe = True
 
     if existe:
-        return redirect("/portall", messages.error(request, "El estudiante ya pertenece al curso"))
+        return redirect("/portall", messages.warning(request, "El estudiante ya pertenece al curso"))
 
     try:
         usuario = User.objects.get(username=username)
@@ -476,7 +476,7 @@ def agregarEstudiantesCurso(request):
         return redirect("/portall", messages.error(request, "Ese estudiante no existe"))
     else:
         curso.cuentas.add(usuario)
-        return redirect("/portall", messages.error(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))
+        return redirect("/portall", messages.success(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))
 
 def mensaje(request, id_persona):
     persona = User.objects.get(id=id_persona)
