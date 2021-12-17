@@ -31,5 +31,6 @@ urlpatterns = [
     path("finalizarCurso", views.finalizarCurso, name="finalizarCurso"),
     path("calificarForo/<int:id_foro>/<int:id_estudiante>", views.calificarForo, name="calificarForo"),
     path("notasCurso/<int:id_curso>", views.notasCurso, name="notasCurso"),
-    path("agregarMensaje<int:id_chat>", views.agregarMensaje, name="agregarMensaje")
+    path("agregarMensaje<int:id_chat>", views.agregarMensaje, name="agregarMensaje"),
+    path("editarRespuestaForo/<int:id_respuestaForo>/<int:id_foro>", views.editarRespuestaForo, name="editarRespuestaForo")
 ]

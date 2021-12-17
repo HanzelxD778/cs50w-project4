@@ -50,12 +50,12 @@
                                 <div class="circulo">
                                     <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
                                 </div>
-                                <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
-                                <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                                <p class="card-title"><p>De: <b>{{respuesta.cuenta.username}}</b> - {{respuesta.fecha_respuesta}}</p>
+                                <p class="card-text border">{{respuesta.respuesa_foro}}</p>
                                 {% if respuesta.nota %}
-                                    <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
+                                    <span class="badge badge-info">Nota: {{respuesta.nota}}</span>
                                 {% else %}
-                                    <a href=""><i class="fas fa-pencil-alt"></i> Editar respuesta</a>
+                                    <a href="{% url 'editarRespuestaForo' respuesta.id foro.id %}"><i class="fas fa-pencil-alt"></i> Editar respuesta</a>
                                     <span class="badge badge-secondary">Sin calificar</span>
                                 {% endif %}
                             </div>
@@ -69,10 +69,10 @@
                                 <div class="circulo">
                                     <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
                                 </div>
-                                <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
-                                <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                                <p class="card-title"><p>De: <b>{{respuesta.cuenta.username}}</b> - {{respuesta.fecha_respuesta}}</p>
+                                <p class="card-text border">{{respuesta.respuesa_foro}}</p>
                                 {% if respuesta.nota %}
-                                    <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
+                                    <span class="badge badge-info">Nota: {{respuesta.nota}}</span>
                                 {% else %}
                                     <span class="badge badge-secondary">Sin calificar</span>
                                 {% endif %}
@@ -95,7 +95,11 @@
                         <input name='id_cuenta' class="form-control" style="background: transparent;  border: none;" type="hidden"
                         value="{{user.id}}" readonly placeholder="Default input">
                     </div>
-                    <button type="submit" class="btn btn-success">Subir respuesta</button>
+                    {% if respondio == 0 %}
+                        <button type="submit" class="btn btn-success">Subir respuesta</button>
+                    {% else %}
+                        <button type="button" class="btn btn-primary">Ya has respondido</button>
+                    {% endif %}        
                 </form>
             </div>
         </div>

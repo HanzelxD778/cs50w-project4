@@ -276,17 +276,20 @@ def entregable(request, id_entregable):
 def editarEntregable(request):
     id_entregable = request.POST.get("id_entregable")
     archivo_entrega = request.FILES.get("archivo_entrega")
+    id_entregable_tarea = request.POST.get("id_entregable_tarea")
 
     entrega = Entrega.objects.get(id=id_entregable)
 
     entrega.archivo_entrega = archivo_entrega
 
-    now = datetime.now()
+    now = timezone.now()
     entrega.tiempo_entregado = now
 
     entrega.save()
 
-    return redirect("/portall")
+    print(f"El id del entregable es: {id_entregable_tarea}")
+
+    return redirect(f"/entregable/{id_entregable_tarea}")
 
 def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")
@@ -343,11 +346,18 @@ def foro(request, id_foro):
     seccion = foro.seccion
     curso = seccion.curso
 
+    respondio = 0
+
+    for respuesta in respuestasForo:
+        if respuesta.cuenta.username == request.user:
+            respondio = 1
+
     context = {
         "user": user,
         "foro": foro,
         "respuestasForo": respuestasForo,
-        "curso": curso
+        "curso": curso,
+        "respondio": respondio
     }
 
     return render(request, "PortAll50/foro.html", context)
@@ -362,7 +372,34 @@ def respuestaForo(request):
 
     entrega = RespuestaForo.objects.create(respuesa_foro=respuesa_foro, foro=foro, cuenta=cuenta.info_cuenta)
 
-    return redirect("/portall")
+    return redirect(f"/foro/{id_foro}")
+
+def editarRespuestaForo(request, id_respuestaForo, id_foro):
+    if  request.method == "GET":
+        respuesta = RespuestaForo.objects.get(id=id_respuestaForo)
+
+        context = {
+            "respuesta": respuesta,
+            "id_respuestaForo": id_respuestaForo,
+            "id_foro": id_foro
+        }
+
+        return render(request, "portall50/respuestaForo.html", context)
+
+    else:
+        respuesta = RespuestaForo.objects.get(id=id_respuestaForo)
+
+        respuesa_foro = request.POST.get("respuesa_foro")
+
+        respuesta.respuesa_foro = respuesa_foro
+
+        now = timezone.now()
+
+        respuesta.fecha_respuesta = now
+
+        respuesta.save()
+
+        return redirect(f"/foro/{id_foro}")
 
 def calificarForo(request, id_foro, id_estudiante):
     if request.method == "GET":
@@ -409,6 +446,8 @@ def calificarForo(request, id_foro, id_estudiante):
         except:
             return redirect("/portall", messages.error(request, "Estudiante no ha respondido al foro calificacion por defecto es cero"))
 
+        actualizar = respues.nota
+
         respues.nota = nota_estudiante
         respues.save()
 
@@ -423,6 +462,10 @@ def calificarForo(request, id_foro, id_estudiante):
             return redirect("/portall")
 
         tnota.nota += Decimal(nota_estudiante)
+
+        if actualizar != None:
+            tnota.nota -= actualizar
+
         tnota.save()
 
         return redirect("/portall", messages.success(request, "Estudiante calificado"))

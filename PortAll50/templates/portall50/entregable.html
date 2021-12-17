@@ -123,11 +123,18 @@
                 {% endif %}
                 {% if user.info_cuenta.tipo == "1" %}
                     {% if envio.tiempo_entregado %}
-                        <a target="_blank" href="{{envio.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{envio.archivo_entrega}}</a>
-                        <p>{{envio.tiempo_entregado}}</p>
+                        
+                        
+
+                        <div class="card" style="width: 18rem;">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><a target="_blank" href="{{envio.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{envio.archivo_entrega}}</a></li>
+                                <li class="list-group-item"><p>{{envio.tiempo_entregado}}</p></li>
+                            </ul>
+                        </div>
 
                         <div>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editarEntregable">Editar entrega</button>
+                            <button type="button" class="btn btn-success mt-2" data-toggle="modal" data-target="#editarEntregable">Editar entrega</button>
 
                             <form method="POST" action="{% url 'editarEntregable' %}" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -150,6 +157,8 @@
                                                 </div>
                                                 <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
                                                 value="{{envio.id}}" readonly placeholder="Default input">
+                                                <input name='id_entregable_tarea' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                                value="{{entregable.id}}" readonly placeholder="Default input">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -163,7 +172,7 @@
                     
 
                     {% if envio.nota %}
-                        <p>Nota: {{envio.nota}}</p>
+                        <span class="badge badge-info">Nota: {{envio.nota}}</span>
                     {% endif %}
                 {% endif %}
                 {% if not envio %}
