@@ -18,10 +18,24 @@
         <div class="row">
             <div class="col-lg-3">
                 <h5>Asignación</h5>
-                <a href="{{entregable.archivo.url}}"><i class="far fa-file-alt"></i> {{entregable.nombre_entregable}}</a>
-                <p>Comentario de la asignación: {{entregable.comentario}}</p>
-                <p>Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}</p>
-                <p>Nota del entregable: {{entregable.nota}}</p>
+                <div class="alert alert-primary" role="alert">
+                    <a href="{{entregable.archivo.url}}"><i class="far fa-file-alt"></i> {{entregable.nombre_entregable}}</a>
+                </div>
+                <div class="alert alert-secondary" role="alert">
+                    <p>Comentario de la asignación: {{entregable.comentario}}</p>
+                </div>
+                {% if now > entregable.tiempo_disp_hasta %}
+                    <div class="alert alert-danger" role="alert">
+                        Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}
+                    </div>
+                {% else %}
+                    <div class="alert alert-secondary" role="alert">
+                        Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}
+                    </div>
+                {% endif %}
+                <div class="alert alert-light" role="alert">
+                    <p>Nota del entregable: {{entregable.nota}}</p>
+                </div>
             </div>
             <div class="col-lg-4">
                 <h5>Subir entrega</h5>

@@ -23,11 +23,13 @@ urlpatterns = [
     path("perfilEditado", views.perfilEditado, name="perfilEditado"),
     path("calificarEntrega", views.calificarEntrega, name="calificarEntrega"),
     path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso"),
+    path("eliminarEstudiantesCurso", views.eliminarEstudiantesCurso, name="eliminarEstudiantesCurso"),
     path("editarEntregable", views.editarEntregable, name="editarEntregable"),
     path("eliminarCurso", views.eliminarCurso, name="eliminarCurso"),
     path("mensaje/<int:id_persona>", views.mensaje, name="mensaje"),
     path("chatCurso/<int:id_curso>", views.chatCurso, name="chatCurso"),
     path("finalizarCurso", views.finalizarCurso, name="finalizarCurso"),
     path("calificarForo/<int:id_foro>/<int:id_estudiante>", views.calificarForo, name="calificarForo"),
-    path("notasCurso/<int:id_curso>", views.notasCurso, name="notasCurso")
+    path("notasCurso/<int:id_curso>", views.notasCurso, name="notasCurso"),
+    path("agregarMensaje<int:id_chat>", views.agregarMensaje, name="agregarMensaje")
 ]

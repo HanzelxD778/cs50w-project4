@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, RespuestaForo, Seccion, Url, Chat, Mensaje, Nota
 from datetime import datetime
 from decimal import Decimal
+from django.utils import timezone
 
 # Create your views here.
 def index(request):
@@ -154,6 +155,30 @@ def curso(request, id_curso):
 
     return render(request, "PortAll50/curso.html", context)
 
+def chatCurso(request, id_curso):
+    curso = Curso.objects.get(id=id_curso)
+
+    chat = Chat.objects.get(curso=curso)
+    #mensajes = Mensaje.objects.filter(curso=curso)
+
+    context = {
+        "chat": chat
+    }
+
+    return render(request, "PortAll50/chatCurso.html", context)
+
+def agregarMensaje(request, id_chat):
+    mensaje = request.POST.get("mensaje")
+    chat_id = request.POST.get("chat_id")
+    usuario_pk = request.POST.get("usuario")
+
+    usuario = User.objects.get(id=usuario_pk)
+    chat = Chat.objects.get(id=chat_id)
+
+    mensaje = Mensaje.objects.create(mensaje=mensaje, chat=chat, usuario=usuario)
+
+    return redirect(f"chatCurso/{id_chat}")
+
 def eliminarCurso(request):
     curso_id = request.POST.get("curso_id")
 
@@ -218,6 +243,8 @@ def entregable(request, id_entregable):
     entregas = Entrega.objects.filter(entregable=entregable)
     estudiante = User.objects.get(username=request.user)
 
+    now = timezone.now()
+
     try:
         entregas_usuario = Entrega.objects.filter(entregable=entregable)
     except:
@@ -238,7 +265,8 @@ def entregable(request, id_entregable):
         "entregas": entregas,
         "entregas_usuario": entregas_usuario,
         "estudiante": estudiante,
-        "envio": envio
+        "envio": envio,
+        "now": now
     }
 
     return render(request, "PortAll50/entregable.html", context)
@@ -478,6 +506,27 @@ def agregarEstudiantesCurso(request):
         curso.cuentas.add(usuario)
         return redirect("/portall", messages.success(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))
 
+def eliminarEstudiantesCurso(request):
+    username = request.POST.get("username")
+    curso_id = request.POST.get("curso_id")
+
+    curso = Curso.objects.get(id=curso_id)
+
+    existe = False
+
+    for estudiante in curso.cuentas.all():
+        if estudiante.username == username:
+            existe = True
+            estudiante.delete()
+            estudiante.save()
+
+
+    if existe:
+        return redirect("/portall", messages.success(request, f"{username} eliminado del curso"))
+    else:
+        return redirect("/portall", messages.error(request, f"{username} no pertenece a este curso"))
+
+
 def mensaje(request, id_persona):
     persona = User.objects.get(id=id_persona)
 
@@ -486,17 +535,6 @@ def mensaje(request, id_persona):
     }
 
     return render(request, "PortAll50/persona.html", context)
-
-def chatCurso(request, id_curso):
-    curso = Curso.objects.get(id=id_curso)
-
-    chat = Chat.objects.get(curso=curso)
-
-    context = {
-        "chat": chat
-    }
-
-    return render(request, "PortAll50/chatCurso.html", context)
 
 def finalizarCurso(request):
     id_curso = request.POST.get("curso_id")

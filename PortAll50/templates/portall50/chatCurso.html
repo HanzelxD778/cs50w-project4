@@ -10,16 +10,48 @@
 {% endblock %}
 
 {% block css %}
-    
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
 {% endblock %}
 
 {% block main %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                {{chat.nombre_chat}}
+    <div class="container border">
+        <center>
+            <div class="chats" style="height: 50vh;">
+                <ul class="list">
+                    <div class="header_chat"><h5>{{chat.nombre_chat}}</h5></div>
+                    
+                    {% for mensaje in chat.mensajes.all %}
+                        {% if mensaje.usuario == user %}
+                            <li class="mi-persona">
+                                <span class="badge badge-primary">{{mensaje.usuario}}</span>
+                                {{mensaje.mensaje}}
+                                <span class="badge badge-secondary">{{mensaje.tiempo}}</span>
+                            </li>
+                        {% else %}
+                            <li class="otra-persona">
+                                <span class="badge badge-primary">{{mensaje.usuario}}</span>
+                                {{mensaje.mensaje}}
+                                <span class="badge badge-secondary">{{mensaje.tiempo}}</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
+
+            <form method="POST" action="{% url 'agregarMensaje' chat.curso.id %}">
+                {% csrf_token %}
+                <div class="d-flex justify-content-between align-items-center" style="height: 20vh;">
+                    <div class="input-group mx-3">
+                        <input type="text" class="form-control" required name="mensaje" autofocus autocomplete="off" placeholder="Escribe un mensaje aquí" style="border-radius:10px;">
+                    </div>
+                    <input name='chat_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                    value="{{chat.id}}" readonly placeholder="Default input">
+                    <input name='usuario' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                    value="{{user.pk}}" readonly placeholder="Default input">
+                    <button type="submit" class="btn btn-primary">Enviar</button>        
+                </div>
+            </form>
+        </center>
     </div>
 
 {% endblock %}

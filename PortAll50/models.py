@@ -129,13 +129,13 @@ class Mensaje(models.Model):
     mensaje = models.CharField(max_length=100)
     tiempo = models.DateTimeField(auto_now_add=True)
     chat = models.ForeignKey(Chat, on_delete=CASCADE, related_name="mensajes")
-    cuenta = models.ForeignKey(Cuenta, on_delete=CASCADE, related_name="mensajes")
+    usuario = models.ForeignKey(User, on_delete=CASCADE, related_name="mensajes")
 
     class Meta:
         verbose_name_plural = "Mensajes"
 
     def __str__(self):
-        return f"{self.mensaje} {self.tiempo} {self.chat} {self.cuenta}"
+        return f"{self.mensaje} {self.tiempo} {self.chat} {self.usuario}"
 
 class Entregable(models.Model):
     nombre_entregable = models.CharField(max_length=30)

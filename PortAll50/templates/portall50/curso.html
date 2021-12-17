@@ -80,8 +80,9 @@
                         {% for participante in curso.cuentas.all %}    
                             <p class="card-text"><a href="{% url 'mensaje' participante.id %}"><i class="far fa-user"></i> {{participante.first_name}} {{participante.last_name}}</a></p>
                        {% endfor %}
-                       <p class="card-text"><a href="{% url 'chatCurso' curso.id %}"><i class="fas fa-users"></i> Chat de curso</a></p>
-                       <p class="card-text"><a href="{% url 'notasCurso' curso.id %}"><i class="far fa-chart-bar"></i> Notas</a></p>
+                       {# <p class="card-text"><a href="{% url 'chatCurso' curso.id %}"><i class="fas fa-users"></i> Chat de curso</a></p> #}
+                        <p class="card-text"><a href="{% url 'chatCurso' curso.id %}"><i class="fas fa-users"></i> Chat de curso</a></p>
+                        <p class="card-text"><a href="{% url 'notasCurso' curso.id %}"><i class="far fa-chart-bar"></i> Notas</a></p>
                     </div>
                     <div class="card-footer">
                         <p>Total de puntaje a acumular: {{curso.total_acumular}}</p>
@@ -364,6 +365,42 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         <button type="submit" class="btn btn-primary">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#eliminarEstudiantesCurso">
+                            Eliminar estudiante del curso
+                        </button>
+                        <!-- Button trigger modal -->
+                        <!-- MODAL AGREGAR FORO -->
+                        <form method="POST" action="{% url 'eliminarEstudiantesCurso' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Modal -->
+                            <div class="modal fade" id="eliminarEstudiantesCurso" tabindex="-1" aria-labelledby="eliminarEstudiantesCurso" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="eliminarEstudiantesCurso">
+                                            Eliminar estudiante del curso
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input required type="text" name="username" class="form-control" placeholder="Nombre unico del estudiante a eliminar" autocomplete="off">
+                                        </div>
+                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
+                                        value="{{curso.id}}" readonly placeholder="Default input">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
                                     </div>
                                 </div>
                             </div>
