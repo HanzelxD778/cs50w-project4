@@ -503,6 +503,9 @@ def calificarEntrega(request):
     if Decimal(nota) > entrega.entregable.nota:
         return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del entregable"))
 
+    if Decimal(nota) < 0:
+        return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
+
     entrega.nota = nota
     
     entrega.estado_entrega = "1"
@@ -523,6 +526,46 @@ def calificarEntrega(request):
     tnota.save()
 
     return redirect("/portall")
+
+def editarCalificacionEntrega(request, id_entrega):
+    if request.method == "GET":
+
+        entrega = Entrega.objects.get(id=id_entrega)
+        
+        context = {
+            "entrega": entrega
+        }
+
+        return render(request, "portall50/editarCalificacionEntrega.html", context)
+    else:
+        nota = request.POST.get("nota_estudiante")
+        
+        entrega = Entrega.objects.get(id=id_entrega)
+        
+        if Decimal(nota) > entrega.entregable.nota:
+            return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del entregable"))
+
+        if Decimal(nota) < 0:
+            return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
+
+        antes_nota = entrega.nota
+
+        entrega.nota = nota
+
+        entrega.save()
+
+        estudiante = entrega.cuenta
+        curso = entrega.entregable.seccion.curso
+
+        tnota = Nota.objects.get(curso=curso, estudiante=estudiante)
+
+        tnota.nota += Decimal(nota)
+        tnota.nota -= Decimal(antes_nota)
+
+        tnota.save()
+
+        return redirect(f"/entregable/{entrega.entregable.id}", messages.success(request, "Calificación actualizada"))
+
 
 def agregarEstudiantesCurso(request):
     username = request.POST.get("username")

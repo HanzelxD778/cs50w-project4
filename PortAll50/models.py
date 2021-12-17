@@ -170,6 +170,3 @@ class Entrega(models.Model):
     def __str__(self):
         return f"{self.id} {self.archivo_entrega} {self.tiempo_entregado} {self.nota} {self.entregable} {self.cuenta} {self.estado_entrega}"
 
-##########################################################################################
-#                                  HACER CUESTIONARIO
-##########################################################################################

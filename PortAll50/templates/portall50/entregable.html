@@ -75,7 +75,7 @@
                             <div class="card-body">
                                 <a target="_blank" href="{{entre.archivo_entrega.url}}"><i class="far fa-file-alt"></i> {{entre.archivo_entrega}}</a>
                                 <p>{{entre.tiempo_entregado}}</p>
-                                <p>Entregado por: {{entre.cuenta.username}}</p>
+                                <p>Entregado por: {{entre.cuenta.first_name}} {{entre.cuenta.last_name}}</p>
                                 {% if entre.nota %}
                                     <p>Nota: {{entre.nota}}</p>
                                 {% endif %}
@@ -85,6 +85,7 @@
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#calificarEntrega{{entre.id}}">Calificar entrega</button>
                                     {% else %}
                                         <button type="button" class="btn btn-success">Calificado</button>
+                                        <a class="btn btn-warning" href="{% url 'editarCalificacionEntrega' entre.id %}" >Editar calificación</a>
                                     {% endif %}
 
                                     <form method="POST" action="{% url 'calificarEntrega' %}" enctype="multipart/form-data">
