@@ -433,10 +433,10 @@ def calificarForo(request, id_foro, id_estudiante):
         cuenta = estudiante.info_cuenta
 
         if Decimal(nota_estudiante) < 0:
-            return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
+            return redirect(f"/foro/{id_foro}", messages.error(request, "No se puede poner calificación menor que 0"))
 
         if Decimal(nota_estudiante) > foro.nota:
-            return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del foro"))
+            return redirect(f"/foro/{id_foro}", messages.error(request, "No se puede poner esa calificación porque super la nota del foro"))
 
         for respuesta in foro.respuestas.all():
             if respuesta.cuenta == cuenta:
@@ -445,7 +445,7 @@ def calificarForo(request, id_foro, id_estudiante):
         try:
             respues = RespuestaForo.objects.get(id=id_respuesta)
         except:
-            return redirect("/portall", messages.error(request, "Estudiante no ha respondido al foro calificacion por defecto es cero"))
+            return redirect(f"/foro/{id_foro}", messages.error(request, "Estudiante no ha respondido al foro calificacion por defecto es cero"))
 
         actualizar = respues.nota
 
@@ -460,7 +460,7 @@ def calificarForo(request, id_foro, id_estudiante):
             tnota = Nota.objects.get(curso=curso, estudiante=estudiante)
         except:
             tnota = Nota.objects.create(nota=nota_estudiante, curso=curso, estudiante=estudiante)
-            return redirect("/portall")
+            return redirect(f"/foro/{id_foro}")
 
         tnota.nota += Decimal(nota_estudiante)
 
@@ -469,7 +469,7 @@ def calificarForo(request, id_foro, id_estudiante):
 
         tnota.save()
 
-        return redirect("/portall", messages.success(request, "Estudiante calificado"))
+        return redirect(f"/foro/{id_foro}", messages.success(request, "Estudiante calificado"))
 
 def agregarSeccion(request):
     nombre_seccion = request.POST.get("nombre_seccion")

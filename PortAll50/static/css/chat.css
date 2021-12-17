@@ -15,7 +15,7 @@
 .otra-persona {
     word-wrap: break-word;
     width: 50%;
-    background-color: #566573;
+    background-color: rgba(5, 7, 12, 0.40);
     padding: 7px 10px;
     border-radius: 10px;
     margin: 0px auto 5px 5px;

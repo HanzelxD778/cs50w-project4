@@ -88,7 +88,12 @@
                         <p>Total de puntaje a acumular: {{curso.total_acumular}}</p>
                         <p>Nota minima para de aprobar el curso: {{curso.cantidad_minima}}</p>
                         <p>Total actual acumulado: {{curso.actual_acumulado}}</p>
-                        <p>Estado del curso: {{curso.estado_curso}}</p>
+                        {% if curso.estado_curso == "2" %}
+                            <p>Estado del curso: Finalizado</p>
+                        {% else %}
+                            <p>Estado del curso: Activo</p>
+                        {% endif %}
+                        
                     </div>
                 </div>
 

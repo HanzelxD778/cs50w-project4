@@ -23,12 +23,18 @@
                     {% for mensaje in chat.mensajes.all %}
                         {% if mensaje.usuario == user %}
                             <li class="mi-persona">
+                                <div class="circulo">
+                                    <img class="imagen" src="{{mensaje.usuario.info_cuenta.imagen.url}}" class="card-img-top">
+                                </div>
                                 <span class="badge badge-primary">{{mensaje.usuario}}</span>
                                 {{mensaje.mensaje}}
                                 <span class="badge badge-secondary">{{mensaje.tiempo}}</span>
                             </li>
                         {% else %}
                             <li class="otra-persona">
+                                <div class="circulo">
+                                    <img class="imagen" src="{{mensaje.usuario.info_cuenta.imagen.url}}" class="card-img-top">
+                                </div>
                                 <span class="badge badge-primary">{{mensaje.usuario}}</span>
                                 {{mensaje.mensaje}}
                                 <span class="badge badge-secondary">{{mensaje.tiempo}}</span>
