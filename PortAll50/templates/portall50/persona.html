@@ -25,9 +25,9 @@
                         <p class="card-text">Correo: {{persona.email}}</p>
                     </div>
                 </div>
+            </div>
 
-                <br>
-
+            <div class="col-lg-8">
                 <form method="POST" action="{% url 'mensaje' persona.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="input-group">
@@ -42,10 +42,6 @@
                     </div>
                     <button type="submit" class="btn btn-success">Enviar mensaje</button>
                 </form>
-            </div>
-
-            <div class="col-lg-8">
-                
             </div>
         </div>
     </div>

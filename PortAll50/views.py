@@ -1,5 +1,3 @@
-from typing import ChainMap
-from django.http import HttpResponse, request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
@@ -10,6 +8,9 @@ from . models import Cuenta, Curso, Entrega, Foro, Material, Entregable, Respues
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
 
 # Create your views here.
 def index(request):

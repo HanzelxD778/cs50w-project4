@@ -41,23 +41,44 @@
             </div>
             <div class="col-lg-4">
                 {% for respuesta in respuestasForo %}
-                    <div class="card w-95">
-                        <div class="card-header">
-                            Respuesta a: {{foro.nombre_foro}}
-                        </div>
-                        <div class="card-body">
-                            <div class="circulo">
-                                <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
+                    {% if respuesta.cuenta.username == user %}
+                        <div class="card w-95 border-primary">
+                            <div class="card-header">
+                                Respuesta a: {{foro.nombre_foro}}
                             </div>
-                            <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
-                            <p class="card-text">{{respuesta.respuesa_foro}}</p>
-                            {% if respuesta.nota %}
-                                <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
-                            {% else %}
-                                <span class="badge badge-secondary">Sin calificar</span>
-                            {% endif %}
+                            <div class="card-body">
+                                <div class="circulo">
+                                    <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
+                                </div>
+                                <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
+                                <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                                {% if respuesta.nota %}
+                                    <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
+                                {% else %}
+                                    <a href=""><i class="fas fa-pencil-alt"></i> Editar respuesta</a>
+                                    <span class="badge badge-secondary">Sin calificar</span>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>   
+                    {% else %}
+                        <div class="card w-95">
+                            <div class="card-header">
+                                Respuesta a: {{foro.nombre_foro}}
+                            </div>
+                            <div class="card-body">
+                                <div class="circulo">
+                                    <img class="imagen" src="{{respuesta.cuenta.imagen.url}}" class="card-img-top">
+                                </div>
+                                <p class="card-title"><p>De: {{respuesta.cuenta.username}} - {{respuesta.fecha_respuesta}}</p>
+                                <p class="card-text">{{respuesta.respuesa_foro}}</p>
+                                {% if respuesta.nota %}
+                                    <span class="badge badge-primary">Nota: {{respuesta.nota}}</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">Sin calificar</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}   
                     <br>
                 {% endfor %}
             </div>
