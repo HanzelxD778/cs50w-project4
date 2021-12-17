@@ -26,6 +26,16 @@
                         </div>
                     </div>
 
+                    {% if now > foro.fecha_vencimiento %}
+                        <div class="alert alert-danger" role="alert" style="max-width: 18rem;">
+                            Fecha limite de entrega: {{foro.fecha_vencimiento}}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert" style="max-width: 18rem;">
+                            Fecha limite de entrega: {{foro.fecha_vencimiento}}
+                        </div>
+                    {% endif %}
+
                     {% if user.info_cuenta.tipo == "2" %}
                             <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
                                 <div class="card-title card-header">Calificar un estudiante</div>

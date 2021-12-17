@@ -40,7 +40,7 @@
                             {% endif %}
 
                             {% if seccion.seccion_url.all %}
-                                <h5>Enlaces</h5>
+                                <h5 class="mt-2">Enlaces</h5>
                                 <ul class="list-group">
                                     {% for enlace in seccion.seccion_url.all %}
                                         <li class="list-group-item"><a target="_blank" href="{{enlace.url}}"><i class="fas fa-link"></i> {{enlace.nombre_enlace}}</a></li>
@@ -49,7 +49,7 @@
                             {% endif %}
 
                             {% if seccion.seccion_entregable.all %}
-                            <h5>Entregables</h5>
+                            <h5 class="mt-2">Entregables</h5>
                                 <ul class="list-group">
                                     {% for entregable in seccion.seccion_entregable.all %}
                                         <li class="list-group-item"><a href="{% url 'entregable' entregable.id %}"><i class="fas fa-file-import"></i> {{entregable.nombre_entregable}}</a></li>
@@ -58,7 +58,7 @@
                             {% endif %}
                             
                             {% if seccion.seccion_foro.all %}
-                                <h5>Foros</h5>
+                                <h5 class="mt-2">Foros</h5>
                                 <ul class="list-group">
                                     {% for foro in seccion.seccion_foro.all %}
                                         <li class="list-group-item"><a href="{% url 'foro' foro.id %}"><i class="far fa-comment-alt"></i> {{foro.nombre_foro}}</a></li>
@@ -200,14 +200,13 @@
                                                 <div class="form-group">
                                                     <input required type="text" name="nombre_material" class="form-control" placeholder="Nombre del archivo" autocomplete="off">
                                                 </div>
-                                                <p>El archivito va aquí xd</p>
                                                 <div class="input-group">
                                                     <div class="custom-file">
                                                         <input required name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
                                                         <label class="custom-file-label" for="inputGroupFile04">Archivo aqui</label>
                                                     </div>
                                                 </div>
-                                                <select name="seccion_id" >
+                                                <select class="mt-2" name="seccion_id" >
                                                     {% for seccion in curso.seccion_curso.all %}
                                                         <option value="{{seccion.pk}}">{{seccion.nombre}}</option>
                                                     {% endfor %}
@@ -248,7 +247,6 @@
                                             <div class="form-group">
                                                 <input required type="text" name="nombre_entregable" class="form-control" placeholder="Nombre del entregable" autocomplete="off">
                                             </div>
-                                            <p>El archivito va aquí xd</p>
                                             <div class="input-group">
                                                 <div class="custom-file">
                                                     <input required name="archivo" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
@@ -372,48 +370,12 @@
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-primary mt-4" data-toggle="modal" data-target="#eliminarEstudiantesCurso">
-                            Eliminar estudiante del curso
-                        </button>
-                        <!-- Button trigger modal -->
-                        <!-- MODAL AGREGAR FORO -->
-                        <form method="POST" action="{% url 'eliminarEstudiantesCurso' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <!-- Modal -->
-                            <div class="modal fade" id="eliminarEstudiantesCurso" tabindex="-1" aria-labelledby="eliminarEstudiantesCurso" aria-hidden="true">
-                                <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-center" id="eliminarEstudiantesCurso">
-                                            Eliminar estudiante del curso
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input required type="text" name="username" class="form-control" placeholder="Nombre unico del estudiante a eliminar" autocomplete="off">
-                                        </div>
-                                        <input name='curso_id' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                                        value="{{curso.id}}" readonly placeholder="Default input">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div>
                         {% if curso.estado_curso == "2" %}
                         <button type="button" class="btn btn-success mt-4">
                             Curso finalizado
                         </button>  
                         {% else %}
-                            <button type="button" class="btn btn-success mt-4" data-toggle="modal" data-target="#finalizarCurso">
+                            <button type="button" class="btn btn-info mt-4" data-toggle="modal" data-target="#finalizarCurso">
                                 Finalizar curso
                             </button>
                         {% endif %}

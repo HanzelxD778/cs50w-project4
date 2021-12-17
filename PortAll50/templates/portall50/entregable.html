@@ -29,7 +29,7 @@
                         Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}
                     </div>
                 {% else %}
-                    <div class="alert alert-secondary" role="alert">
+                    <div class="alert alert-warning" role="alert">
                         Fecha limite de entrega: {{entregable.tiempo_disp_hasta}}
                     </div>
                 {% endif %}
@@ -44,7 +44,7 @@
                     <div class="input-group">
                         <div class="custom-file">
                             <input required name="archivo_entrega" type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                            <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aqui</label>
+                            <label class="custom-file-label" for="inputGroupFile04">Archivo entrega aquí</label>
                         </div>
                         <input name='id_entregable' class="form-control" style="background: transparent;  border: none;" type="hidden"
                         value="{{entregable.id}}" readonly placeholder="Default input">
@@ -59,9 +59,6 @@
                             <button type="button" class="btn btn-primary mt-2">Entrega realizada</button>
                         {% else %}
                             <button type="submit" class="btn btn-success mt-2">Enviar entrega</button>
-                        {% endif %}
-                        {% if not envio %}
-                            <button type="submit" class="btn btn-success">Enviar entrega</button>                
                         {% endif %}
                     {% endif %}
     

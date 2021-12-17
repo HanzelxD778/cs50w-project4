@@ -39,7 +39,7 @@ def register(request):
 
     cuenta_user = Cuenta.objects.create(username=user, tipo=tipo_cuenta, imagen=imagen)
 
-    messages.success(request, "User saved." )
+    messages.success(request, "Cuenta registrada")
 
     return HttpResponseRedirect(reverse("login"))
 
@@ -106,7 +106,7 @@ def perfilEditado(request):
     if password:
         return redirect("/accounts/logout")
 
-    return redirect("/portall")
+    return redirect("/portall", messages.success(request, "Perfil actualizado"))
 
 def agregarCurso(request):
 
@@ -144,7 +144,7 @@ def registrarCurso(request):
 
     chatCurso = Chat.objects.create(nombre_chat=nombre_chat, curso=curso)
 
-    return redirect("/portall")
+    return redirect("/portall", messages.success(request, "Curso agregado"))
 
 def curso(request, id_curso):
 
@@ -187,7 +187,7 @@ def eliminarCurso(request):
 
     curso.delete()
 
-    return redirect("/portall")
+    return redirect("/portall", messages.warning(request, "Enlace agregado"))
 
 def agregarMaterial(request):
     nombre_material = request.POST.get("nombre_material")
@@ -202,7 +202,7 @@ def agregarMaterial(request):
     print(id_curso)
 
     #return redirect("/portall")
-    return redirect(f"curso/{id_curso}")
+    return redirect(f"curso/{id_curso}", messages.success(request, "Material agregado"))
 
 def agregarEntregable(request):
     nombre_entregable = request.POST.get("nombre_entregable")
@@ -237,7 +237,7 @@ def agregarEntregable(request):
 
     entregable = Entregable.objects.create(nombre_entregable=nombre_entregable, archivo=archivo, comentario=comentario, tiempo_disp_hasta=fecha,seccion=seccion, nota=nota)
 
-    return redirect(f"curso/{id_curso}")
+    return redirect(f"curso/{id_curso}", messages.success(request, "Entregable agregado"))
 
 def entregable(request, id_entregable):
     entregable = Entregable.objects.get(id=id_entregable)
@@ -287,9 +287,7 @@ def editarEntregable(request):
 
     entrega.save()
 
-    print(f"El id del entregable es: {id_entregable_tarea}")
-
-    return redirect(f"/entregable/{id_entregable_tarea}")
+    return redirect(f"/entregable/{id_entregable_tarea}", messages.success(request, "Entrega actualizada"))
 
 def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")
@@ -303,7 +301,7 @@ def agregarEntrega(request):
 
     agregarEntrega = Entrega.objects.create(archivo_entrega=archivo_entrega, entregable=entregable, cuenta=cuenta, estado_entrega=estado_entrega)
 
-    return redirect("/portall")
+    return redirect(f"/entregable/{id_entregable}", messages.success(request, "Entrega realizada"))
 
 def agregarForo(request):
     nombre_foro = request.POST.get("nombre_foro")
@@ -337,7 +335,7 @@ def agregarForo(request):
 
     foro = Foro.objects.create(nombre_foro=nombre_foro, asignacion_foro=asignacion_foro, fecha_vencimiento=fecha, seccion=seccion, nota=nota)
 
-    return redirect(f"curso/{id_curso}")
+    return redirect(f"curso/{id_curso}", messages.success(request, "Foro agregado"))
 
 def foro(request, id_foro):
     user = request.user
@@ -352,12 +350,15 @@ def foro(request, id_foro):
         if respuesta.cuenta.username == request.user:
             respondio = 1
 
+    now = timezone.now()
+
     context = {
         "user": user,
         "foro": foro,
         "respuestasForo": respuestasForo,
         "curso": curso,
-        "respondio": respondio
+        "respondio": respondio,
+        "now": now
     }
 
     return render(request, "PortAll50/foro.html", context)
@@ -372,7 +373,7 @@ def respuestaForo(request):
 
     entrega = RespuestaForo.objects.create(respuesa_foro=respuesa_foro, foro=foro, cuenta=cuenta.info_cuenta)
 
-    return redirect(f"/foro/{id_foro}")
+    return redirect(f"/foro/{id_foro}", messages.success(request, "Respuesta agregada"))
 
 def editarRespuestaForo(request, id_respuestaForo, id_foro):
     if  request.method == "GET":
@@ -399,7 +400,7 @@ def editarRespuestaForo(request, id_respuestaForo, id_foro):
 
         respuesta.save()
 
-        return redirect(f"/foro/{id_foro}")
+        return redirect(f"/foro/{id_foro}", messages.success(request, "Respuesta agregado"))
 
 def calificarForo(request, id_foro, id_estudiante):
     if request.method == "GET":
@@ -478,7 +479,7 @@ def agregarSeccion(request):
 
     seccion = Seccion.objects.create(nombre=nombre_seccion, curso=curso)
 
-    return redirect("/portall")
+    return redirect(f"/curso/{curso_id}", messages.success(request, "Sección agregada"))
 
 def agregarEnlace(request):
     nombre_enlace = request.POST.get("nombre_enlace")
@@ -492,7 +493,7 @@ def agregarEnlace(request):
 
     print(id_curso)
 
-    return redirect(f"curso/{id_curso}")
+    return redirect(f"curso/{id_curso}", messages.success(request, "Enlace agregado"))
 
 def calificarEntrega(request):
     id_entrega = request.POST.get("id_entrega")
@@ -501,10 +502,10 @@ def calificarEntrega(request):
     entrega = Entrega.objects.get(id=id_entrega)
     
     if Decimal(nota) > entrega.entregable.nota:
-        return redirect("/portall", messages.error(request, "No se puede poner esa calificación porque super la nota del entregable"))
+        return redirect(f"/entregable/{entrega.entregable.id}", messages.error(request, "No se puede poner esa calificación porque super la nota del entregable"))
 
     if Decimal(nota) < 0:
-        return redirect("/portall", messages.error(request, "No se puede poner calificación menor que 0"))
+        return redirect(f"/entregable/{entrega.entregable.id}", messages.error(request, "No se puede poner calificación menor que 0"))
 
     entrega.nota = nota
     
@@ -520,12 +521,12 @@ def calificarEntrega(request):
         tnota = Nota.objects.get(curso=curso, estudiante=estudiante)
     except:
         tnota = Nota.objects.create(nota=nota, curso=curso, estudiante=estudiante)
-        return redirect("/portall")
+        return redirect(f"/curso")
 
     tnota.nota += Decimal(nota)
     tnota.save()
 
-    return redirect("/portall")
+    return redirect(f"/entregable/{entrega.entregable.id}", messages.success(request, "Entrega calificada"))
 
 def editarCalificacionEntrega(request, id_entrega):
     if request.method == "GET":
@@ -593,26 +594,6 @@ def agregarEstudiantesCurso(request):
         curso.cuentas.add(usuario)
         return redirect("/portall", messages.success(request, f"{usuario.username} agregado al curso {curso.nombre_curso}"))
 
-def eliminarEstudiantesCurso(request):
-    username = request.POST.get("username")
-    curso_id = request.POST.get("curso_id")
-
-    curso = Curso.objects.get(id=curso_id)
-
-    existe = False
-
-    for estudiante in curso.cuentas.all():
-        if estudiante.username == username:
-            existe = True
-            estudiante.delete()
-            estudiante.save()
-
-
-    if existe:
-        return redirect("/portall", messages.success(request, f"{username} eliminado del curso"))
-    else:
-        return redirect("/portall", messages.error(request, f"{username} no pertenece a este curso"))
-
 
 def mensaje(request, id_persona):
     persona = User.objects.get(id=id_persona)
@@ -638,9 +619,7 @@ def finalizarCurso(request):
 
     curso.save()
 
-    
-
-    return redirect(f"curso/{id_curso}")
+    return redirect(f"curso/{id_curso}", messages.info(request, "Curso finalizado"))
 
 def notasCurso(request, id_curso):
     curso = Curso.objects.get(id=id_curso)

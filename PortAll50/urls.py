@@ -23,7 +23,6 @@ urlpatterns = [
     path("perfilEditado", views.perfilEditado, name="perfilEditado"),
     path("calificarEntrega", views.calificarEntrega, name="calificarEntrega"),
     path("agregarEstudiantesCurso", views.agregarEstudiantesCurso, name="agregarEstudiantesCurso"),
-    path("eliminarEstudiantesCurso", views.eliminarEstudiantesCurso, name="eliminarEstudiantesCurso"),
     path("editarEntregable", views.editarEntregable, name="editarEntregable"),
     path("eliminarCurso", views.eliminarCurso, name="eliminarCurso"),
     path("mensaje/<int:id_persona>", views.mensaje, name="mensaje"),

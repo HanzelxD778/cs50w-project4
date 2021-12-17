@@ -17,6 +17,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
+                
+            </div>
+
+            <div class="col-lg-8">
                 <div class="card" style="width: 18rem;">
                     <img src="{{persona.info_cuenta.imagen.url}}" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -25,23 +29,6 @@
                         <p class="card-text">Correo: {{persona.email}}</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-8">
-                <form method="POST" action="{% url 'mensaje' persona.id %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Enviar un mensaje ESTO NO SIRVE TODAVIA</label>
-                            <textarea required name="respuesa_foro" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                        <input name='id_foro' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                        value="{{foro.id}}" readonly placeholder="Default input">
-                        <input name='id_cuenta' class="form-control" style="background: transparent;  border: none;" type="hidden"
-                        value="{{user.id}}" readonly placeholder="Default input">
-                    </div>
-                    <button type="submit" class="btn btn-success">Enviar mensaje</button>
-                </form>
             </div>
         </div>
     </div>
