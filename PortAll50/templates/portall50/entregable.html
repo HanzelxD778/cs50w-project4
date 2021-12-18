@@ -36,6 +36,7 @@
                 <div class="alert alert-light" role="alert">
                     <p>Nota del entregable: {{entregable.nota}}</p>
                 </div>
+                <a class="btn btn-light" href="{% url 'editarNotaEntregable' entregable.id %}">Editar nota del entregable</a>
             </div>
             <div class="col-lg-4">
                 <h5>Subir entrega</h5>
@@ -75,6 +76,9 @@
                                 <p>Entregado por: {{entre.cuenta.first_name}} {{entre.cuenta.last_name}}</p>
                                 {% if entre.nota %}
                                     <p>Nota: {{entre.nota}}</p>
+                                    {% if entre.nota > entregable.nota %}
+                                        <span class="badge badge-danger">Actualizar nota de este estudiante</span>
+                                    {% endif %}
                                 {% endif %}
 
                                 <div>

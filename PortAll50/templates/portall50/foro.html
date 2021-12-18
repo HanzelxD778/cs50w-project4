@@ -47,6 +47,7 @@
                                         {% endfor %}
                                     </div>
                             </div>
+                            <a class="btn btn-light" href="{% url 'editarNotaForo' foro.id %}">Editar nota del foro</a>
                     {% endif %}
             </div>
             <div class="col-lg-4">
@@ -83,6 +84,9 @@
                                 <p class="card-text border">{{respuesta.respuesa_foro}}</p>
                                 {% if respuesta.nota %}
                                     <span class="badge badge-info">Nota: {{respuesta.nota}}</span>
+                                    {% if respuesta.nota > foro.nota %} 
+                                        <span class="badge badge-danger">Actualizar nota de este estudiante</span>
+                                    {% endif %}
                                 {% else %}
                                     <span class="badge badge-secondary">Sin calificar</span>
                                 {% endif %}

@@ -32,5 +32,7 @@ urlpatterns = [
     path("notasCurso/<int:id_curso>", views.notasCurso, name="notasCurso"),
     path("agregarMensaje<int:id_chat>", views.agregarMensaje, name="agregarMensaje"),
     path("editarRespuestaForo/<int:id_respuestaForo>/<int:id_foro>", views.editarRespuestaForo, name="editarRespuestaForo"),
-    path("editarCalificacionEntrega/<int:id_entrega>", views.editarCalificacionEntrega, name="editarCalificacionEntrega")
+    path("editarCalificacionEntrega/<int:id_entrega>", views.editarCalificacionEntrega, name="editarCalificacionEntrega"),
+    path("editarNotaEntregable/<int:id_entregable>", views.editarNotaEntregable, name="editarNotaEntregable"),
+    path("editarNotaForo/<int:id_foro>", views.editarNotaForo, name="editarNotaForo")
 ]

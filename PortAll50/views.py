@@ -187,7 +187,7 @@ def eliminarCurso(request):
 
     curso.delete()
 
-    return redirect("/portall", messages.warning(request, "Enlace agregado"))
+    return redirect("/portall", messages.warning(request, "Curso eliminado"))
 
 def agregarMaterial(request):
     nombre_material = request.POST.get("nombre_material")
@@ -288,6 +288,101 @@ def editarEntregable(request):
     entrega.save()
 
     return redirect(f"/entregable/{id_entregable_tarea}", messages.success(request, "Entrega actualizada"))
+
+def editarNotaEntregable(request, id_entregable):
+    if request.method == "GET":
+
+        context = {
+            "id_entregable": id_entregable
+        }
+
+        return render(request, "portall50/editarNotaEntregable.html", context)
+    
+    else:
+        nota_entregable = request.POST.get("nota_entregable")
+
+        entregable = Entregable.objects.get(id=id_entregable)
+        nota_entregable_antigua = entregable.nota
+
+        """Aqui comienza con curso"""
+
+        id_curso = entregable.seccion.curso.id
+        curso = Curso.objects.get(id=id_curso)
+
+        total_acumular = curso.total_acumular
+        actual_acumulado = curso.actual_acumulado
+
+        actual_acumulado -= Decimal(nota_entregable_antigua)
+
+        #asignamos la nueva nota
+        actual_acumulado += Decimal(nota_entregable)    
+
+        if actual_acumulado > total_acumular:
+            return redirect("/portall", messages.error(request, "No se puede poner esa nota al entregable porque supera la nota maxima del curso"))
+
+        curso.actual_acumulado = actual_acumulado
+
+        curso.save()
+
+        """Aquí termina con curso"""
+
+        entregable.nota = nota_entregable
+
+        entregable.save()
+
+        return redirect(f"/entregable/{id_entregable}", messages.success(request, "Nota del entregable actualizada"))
+
+def editarNotaForo(request, id_foro):
+    if request.method == "GET":
+
+        context = {
+            "id_foro": id_foro
+        }
+
+        return render(request, "portall50/editarNotaForo.html", context)
+
+    else:
+        nota_foro = request.POST.get("nota_foro")
+
+        foro = Foro.objects.get(id=id_foro)
+        nota_foro_antigua = foro.nota
+
+        """Aqui comienza con curso"""
+
+        id_curso = foro.seccion.curso.id
+        curso = Curso.objects.get(id=id_curso)
+
+        total_acumular = curso.total_acumular
+        actual_acumulado = curso.actual_acumulado
+
+        actual_acumulado -= Decimal(nota_foro_antigua)
+
+        #asignamos la nueva nota
+        actual_acumulado += Decimal(nota_foro)    
+
+        if actual_acumulado > total_acumular:
+            return redirect("/portall", messages.error(request, "No se puede poner esa nota al foro porque supera la nota maxima del curso"))
+
+        curso.actual_acumulado = actual_acumulado
+
+        curso.save()
+
+        """Aquí termina con curso"""
+
+        foro.nota = nota_foro
+
+        foro.save()
+
+        """Aquí bajo la nota del estudiante si pasa la nota del foro"""
+
+        #for respuesta in foro.respuestas.all(): 
+        #    if respuesta.nota > Decimal(nota_foro):
+        #        respuesta.nota = Decimal(nota_foro)
+        #        respuesta.save() 
+
+        """ Actualizar la nota del estudiante de su tabla Nota """
+
+        return redirect(f"/foro/{id_foro}", messages.success(request, "Nota del foro actualizada"))
 
 def agregarEntrega(request):
     archivo_entrega = request.FILES.get("archivo_entrega")
