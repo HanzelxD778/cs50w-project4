@@ -1,8 +1,8 @@
-#PortAll50
+PortAll50
 
 Incia sesión con una cuenta como docente o como estudiante, las cuentas de docente permite crear cursos, gestionar y visualizar los distintos cursos creados por el docente, agregar estudiantes a los cursos creados por el, donde el docentes puede proveer archivos didácticos, compartir enlaces externos para complementar información sobre los temas a aprender, abrir foros de debate sobre algún tema, colocar tareas a para entregar por los estudiantes y una sección de chat para consultas entre el docente y los estudiantes que pertenezcan al mismo curso.
 
-######Flujo del programa
+Flujo del programa
 
 Al iniciar la página si no has inciado sesión verás una explicón general del proyecto, puedes inciar sesión con una cuenta de las que estan abajo en el readme, admin es una cuenta de docente y Hanzel es una cuenta de estudiante, o puedes crear una cuenta llenando el formulario de crear una cuenta, todos los campos son requeridos, la cuenta que crees escoge si será tipo estudiante o docente
 
